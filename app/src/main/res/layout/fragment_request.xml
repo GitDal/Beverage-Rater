@@ -6,9 +6,11 @@
     tools:context=".RequestFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/requestRcv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Request Fragment" />
+        android:layout_height="394dp"
+        tools:listitem="@layout/request_list_item_user" />
 
 </FrameLayout>

@@ -23,7 +23,7 @@ public class BeverageRepository {
         //TODO: link med firebase
     }
 
-    private List<BeverageRequest> getRequestsForUser(String userId){
+    public List<BeverageRequest> getRequestsForUser(String userId){
         ArrayList<BeverageRequest> requests = new ArrayList<>();
 
         List<Beverage> beverages = getDummyBeverages();

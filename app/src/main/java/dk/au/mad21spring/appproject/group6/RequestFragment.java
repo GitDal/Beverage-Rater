@@ -24,7 +24,7 @@ public class RequestFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static RequestFragment newInstance(@NonNull Application application) {
+    public static RequestFragment newInstance() {
         RequestFragment fragment = new RequestFragment();
         return fragment;
     }

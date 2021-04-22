@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         }
         requestFragment = (RequestFragment) getSupportFragmentManager().findFragmentByTag(REQUESTS_FRAG);
         if(requestFragment==null){
-            requestFragment = RequestFragment.newInstance(this.getApplication());
+            requestFragment = RequestFragment.newInstance();
         }
 
         getSupportFragmentManager().beginTransaction()

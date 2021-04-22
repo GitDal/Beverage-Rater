@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Beverage-Rater</string>
+    <string name="list_beverage_img_description">Image of beverage</string>
+    <string name="add_beverage_text">Don\'t see what you\'re looking for? Add beverage below!</string>
+    <string name="add_beverage_button_text">Add new beverage</string>
+    <string name="add_beverage_barcode_scanner_img_description">Barcode scanner image</string>
 </resources>

@@ -3,6 +3,7 @@ package dk.au.mad21spring.appproject.group6;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +25,12 @@ public class ListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+
+    RecyclerView rcvList;
+    BeverageListAdapter adapter;
+
+    // Required empty public constructor
     public ListFragment() {
-        // Required empty public constructor
     }
 
     /**

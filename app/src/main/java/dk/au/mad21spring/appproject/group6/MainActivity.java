@@ -13,9 +13,7 @@ import com.google.android.material.tabs.TabLayout;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    TextView helloTest;
     TabLayout mainTabs;
-    ConstraintLayout mainFragmentContainer;
 
     //Fragment Tags
     private static final String BEVERAGE_LIST_FRAG = "beverage_list_fragment";
@@ -37,28 +35,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupUI() {
-        helloTest = findViewById(R.id.main_hello_test);
         mainTabs = findViewById(R.id.main_tabs);
-        mainFragmentContainer = findViewById(R.id.main_fragment_containter);
 
         mainTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch(tab.getPosition()) {
                     case 0:
-                        helloTest.setText("Hello List");
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.main_fragment_containter, beverageListFragment, BEVERAGE_LIST_FRAG)
                                 .commit();
                         break;
                     case 1:
-                        helloTest.setText("Hello Request");
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.main_fragment_containter, requestFragment, REQUESTS_FRAG)
                                 .commit();
                         break;
                     case 2:
-                        helloTest.setText("Hello Profile");
                         break;
                     default:
                         Log.d(TAG, "Unhandled switch case");

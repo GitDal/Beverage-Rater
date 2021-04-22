@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initializeFragments();
         setupUI();
     }
 
@@ -39,15 +40,6 @@ public class MainActivity extends AppCompatActivity {
         helloTest = findViewById(R.id.main_hello_test);
         mainTabs = findViewById(R.id.main_tabs);
         mainFragmentContainer = findViewById(R.id.main_fragment_containter);
-
-        beverageListFragment = ListFragment.newInstance("", "");
-        requestFragment = RequestFragment.newInstance("", "");
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.main_fragment_containter, beverageListFragment, BEVERAGE_LIST_FRAG)
-                .add(R.id.main_fragment_containter, requestFragment, REQUESTS_FRAG)
-                .replace(R.id.main_fragment_containter, beverageListFragment, BEVERAGE_LIST_FRAG)
-                .commit();
 
         mainTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -84,5 +76,22 @@ public class MainActivity extends AppCompatActivity {
                 // Go to original fragment for the selected tab
             }
         });
+    }
+
+    private void initializeFragments() {
+        beverageListFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(BEVERAGE_LIST_FRAG);
+        if(beverageListFragment == null){
+            beverageListFragment = ListFragment.newInstance("", "");
+        }
+        requestFragment = (RequestFragment) getSupportFragmentManager().findFragmentByTag(REQUESTS_FRAG);
+        if(requestFragment==null){
+            requestFragment = RequestFragment.newInstance(this.getApplication());
+        }
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.main_fragment_containter, beverageListFragment, BEVERAGE_LIST_FRAG)
+                .add(R.id.main_fragment_containter, requestFragment, REQUESTS_FRAG)
+                .replace(R.id.main_fragment_containter, beverageListFragment, BEVERAGE_LIST_FRAG)
+                .commit();
     }
 }

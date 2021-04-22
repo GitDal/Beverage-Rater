@@ -2,19 +2,25 @@ package dk.au.mad21spring.appproject.group6;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import dk.au.mad21spring.appproject.group6.viewmodels.ListViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements BeverageListAdapter.IBeverageClickedListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +34,7 @@ public class ListFragment extends Fragment {
 
     RecyclerView rcvList;
     BeverageListAdapter adapter;
+    ListViewModel vm;
 
     // Required empty public constructor
     public ListFragment() {
@@ -64,6 +71,34 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_list, container, false);
+        rcvList = v.findViewById(R.id.listRecyclerView);
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        adapter = new BeverageListAdapter(this);
+        rcvList.setAdapter(adapter);
+        rcvList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+        vm = new ViewModelProvider(getActivity()).get(ListViewModel.class);
+        adapter.setBeverages(vm.getAllBeverages());
+
+//        vm.getCityWeatherData().observe(this, new Observer<List<CityWeather>>() {
+//            @Override
+//            public void onChanged(List<CityWeather> cityWeathers) {
+//                adapter.setCityWeathers(cityWeathers);
+//            }
+//        });
+    }
+
+    @Override
+    public void onBeverageClicked(int index){
+        // Open details fragment for selected beverage
+        Toast.makeText(getContext(), vm.getAllBeverages().get(index).Name, Toast.LENGTH_SHORT).show();
     }
 }

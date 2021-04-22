@@ -27,7 +27,10 @@ public class BeverageListAdapter extends RecyclerView.Adapter<BeverageListAdapte
         this.listener = listener;
     }
 
-    public void setCityWeathers(List<Beverage> newList) {
+    public void setBeverages(List<Beverage> newList) {
+        // Maybe order new list according to rank - However how to filter through list
+        // Google: Filtering recycler view / adapter with livedata
+        // Maybe have to list - one with everything, and then on that's filtered if any filter i applied
         this.beverages = newList;
         notifyDataSetChanged();
     }
@@ -62,7 +65,7 @@ public class BeverageListAdapter extends RecyclerView.Adapter<BeverageListAdapte
         holder.beverageCompany.setText(beverage.CompanyName);
         holder.beverageRating.setText("" + beverage.GlobalRating);
 
-        Glide.with(holder.beverageImg.getContext()).load("https://s3-eu-west-2.amazonaws.com/newzimlive/wp-content/uploads/2019/01/09152727/Fizzy-Drinks.jpg").into(holder.beverageImg);
+        Glide.with(holder.beverageImg.getContext()).load(beverage.ImageUrl).into(holder.beverageImg);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

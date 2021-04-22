@@ -22,7 +22,7 @@ public class Beverage {
         ImageUrl = imageUrl;
 
         GlobalRating = 0.0;
-        UserRatings = new ArrayList<>();
-        EanNumbers = new ArrayList<>();
+        UserRatings = new ArrayList();
+        EanNumbers = new ArrayList();
     }
 }

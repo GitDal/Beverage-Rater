@@ -13,8 +13,10 @@ public class Beverage {
     public List<UserRating> UserRatings;
     public String ImageUrl;
     public List<String> EanNumbers;
+    public RequestStatus Status;
+    public String RequestedByUserId;
 
-    public Beverage(String id, String name, String companyName, String beverageInfo, String imageUrl) {
+    public Beverage(String id, String name, String companyName, String beverageInfo, String imageUrl, int statusCode, String requestedByUserId) {
         Id = id;
         Name = name;
         CompanyName = companyName;
@@ -24,5 +26,8 @@ public class Beverage {
         GlobalRating = 0.0;
         UserRatings = new ArrayList();
         EanNumbers = new ArrayList();
+
+        Status = RequestStatus.fromId(statusCode);
+        RequestedByUserId = requestedByUserId;
     }
 }

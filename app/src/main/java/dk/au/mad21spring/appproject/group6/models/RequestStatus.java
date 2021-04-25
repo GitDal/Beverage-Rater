@@ -1,13 +1,13 @@
 package dk.au.mad21spring.appproject.group6.models;
 
-public enum Status {
-    DRAFT(0),
-    PENDING(1),
-    DECLINED(2),
-    APPROVED(3);
+public enum RequestStatus {
+    DRAFT(1),
+    PENDING(2),
+    DECLINED(3),
+    APPROVED(4);
 
     private int id;
-    private Status(int id) {
+    private RequestStatus(int id) {
         this.id = id;
     }
 
@@ -15,8 +15,8 @@ public enum Status {
         return id;
     }
 
-    public static Status fromId(int id) {
-        for(Status type : values()) {
+    public static RequestStatus fromId(int id) {
+        for(RequestStatus type : values()) {
             if(type.id == id) {
                 return type;
             }

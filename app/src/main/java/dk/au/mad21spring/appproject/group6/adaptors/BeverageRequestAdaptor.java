@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import dk.au.mad21spring.appproject.group6.R;
-import dk.au.mad21spring.appproject.group6.models.BeverageRequest;
+import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.RequestStatus;
+
+import com.bumptech.glide.Glide;
 
 public class BeverageRequestAdaptor extends RecyclerView.Adapter<BeverageRequestAdaptor.BeverageRequestViewHolder> {
 
@@ -21,13 +24,13 @@ public class BeverageRequestAdaptor extends RecyclerView.Adapter<BeverageRequest
     }
 
     private IBeverageRequestItemClickedListener listener;
-    private List<BeverageRequest> beverageRequestList;
+    private List<Beverage> beverageRequestList;
 
     public BeverageRequestAdaptor(IBeverageRequestItemClickedListener listener) {
         this.listener = listener;
     }
 
-    public void setBeverageRequests(@NonNull List<BeverageRequest> beverageRequests) {
+    public void setBeverageRequests(@NonNull List<Beverage> beverageRequests) {
         this.beverageRequestList = beverageRequests;
         notifyDataSetChanged();
     }
@@ -43,13 +46,27 @@ public class BeverageRequestAdaptor extends RecyclerView.Adapter<BeverageRequest
 
     @Override
     public void onBindViewHolder(@NonNull BeverageRequestViewHolder holder, int position) {
-        BeverageRequest currentRequest = beverageRequestList.get(position);
+        Beverage currentRequest = beverageRequestList.get(position);
 
-        //TODO add glide
-        //Glide.with(holder.imgFlag.getContext()).load(curCity.getCountryImageUrl()).into(holder.imgFlag);
+        holder.txtBeverageName.setText(currentRequest.Name);
+        holder.txtBeverageCompanyName.setText(currentRequest.CompanyName);
+        Glide.with(holder.imgBeverage.getContext()).load(currentRequest.ImageUrl).into(holder.imgBeverage);
+        holder.imgStatusIcon.setImageResource(resolveIconResId(currentRequest.Status));
+    }
 
-        // Add the rest!
-        holder.txtBeverageName.setText("Test");
+    private int resolveIconResId (RequestStatus status) {
+        switch (status){
+            case DRAFT:
+                return R.drawable.ic_draft_letter;
+            case PENDING:
+                return R.drawable.ic_mail;
+            case DECLINED:
+                return R.drawable.ic_cross_circle_filled;
+            case APPROVED:
+                return R.drawable.ic_check_circle;
+            default:
+                return -1;
+        }
     }
 
     @Override

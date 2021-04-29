@@ -27,7 +27,7 @@ public class BeverageRepository {
         dummyBeverages = getDummyBeverages();
     }
 
-    public List<Beverage> getBeveragesForUser(String userId){
+    public List<Beverage> getBeverageRequestsForUser(String userId){
         List<Beverage> userBeverageRequests = new ArrayList<>();
 
         for(Beverage beverage : dummyBeverages) {

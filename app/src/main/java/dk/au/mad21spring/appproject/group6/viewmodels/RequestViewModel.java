@@ -18,7 +18,7 @@ public class RequestViewModel extends AndroidViewModel {
     public RequestViewModel(@NonNull Application application) {
         super(application);
         beverageRepository = BeverageRepository.getBeverageRepository(application);
-        beverageRequests = beverageRepository.getBeveragesForUser("1");
+        beverageRequests = beverageRepository.getBeverageRequestsForUser("3");
     }
 
     public List<Beverage> GetRequests() {

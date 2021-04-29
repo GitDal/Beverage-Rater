@@ -4,4 +4,10 @@
     <string name="add_beverage_text">Don\'t see what you\'re looking for? Add beverage below!</string>
     <string name="add_beverage_button_text">Add new beverage</string>
     <string name="add_beverage_barcode_scanner_img_description">Barcode scanner image</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="company_label">Company:</string>
+    <string name="info_label">Info:</string>
+    <string name="send_request">Send request</string>
+    <string name="save">Save</string>
 </resources>

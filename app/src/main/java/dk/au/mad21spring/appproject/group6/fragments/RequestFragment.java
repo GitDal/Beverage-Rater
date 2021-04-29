@@ -23,7 +23,10 @@ import dk.au.mad21spring.appproject.group6.viewmodels.RequestViewModel;
 public class RequestFragment extends Fragment implements BeverageRequestAdaptor.IBeverageRequestItemClickedListener {
 
     private static final String TAG = "RequestFragment";
-    
+
+    //Fragment Tags
+    private static final String DETAILS_USER_FRAG = "details_user_fragment";
+
     RequestViewModel vm;
     RecyclerView rcvList;
     BeverageRequestAdaptor adapter;
@@ -77,8 +80,8 @@ public class RequestFragment extends Fragment implements BeverageRequestAdaptor.
             // always readonly
             // approve/decline buttons
 
-
-
-        //getChildFragmentManager().beginTransaction()
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.requestDetailsContainer, RequestDetailsUserFragment.newInstance(bRequest.Id), DETAILS_USER_FRAG)
+                .commit();
     }
 }

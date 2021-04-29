@@ -1,5 +1,7 @@
 package dk.au.mad21spring.appproject.group6.models;
 
+import dk.au.mad21spring.appproject.group6.R;
+
 public enum RequestStatus {
     DRAFT(1),
     PENDING(2),
@@ -22,6 +24,21 @@ public enum RequestStatus {
             }
         }
         return null;
+    }
+
+    public int resolveIconResId () {
+        switch (this){
+            case DRAFT:
+                return R.drawable.ic_draft_letter;
+            case PENDING:
+                return R.drawable.ic_mail;
+            case DECLINED:
+                return R.drawable.ic_cross_circle_filled;
+            case APPROVED:
+                return R.drawable.ic_check_circle;
+            default:
+                return -1;
+        }
     }
 }
 

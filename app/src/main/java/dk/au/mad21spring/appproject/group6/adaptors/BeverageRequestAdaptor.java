@@ -51,22 +51,7 @@ public class BeverageRequestAdaptor extends RecyclerView.Adapter<BeverageRequest
         holder.txtBeverageName.setText(currentRequest.Name);
         holder.txtBeverageCompanyName.setText(currentRequest.CompanyName);
         Glide.with(holder.imgBeverage.getContext()).load(currentRequest.ImageUrl).into(holder.imgBeverage);
-        holder.imgStatusIcon.setImageResource(resolveIconResId(currentRequest.Status));
-    }
-
-    private int resolveIconResId (RequestStatus status) {
-        switch (status){
-            case DRAFT:
-                return R.drawable.ic_draft_letter;
-            case PENDING:
-                return R.drawable.ic_mail;
-            case DECLINED:
-                return R.drawable.ic_cross_circle_filled;
-            case APPROVED:
-                return R.drawable.ic_check_circle;
-            default:
-                return -1;
-        }
+        holder.imgStatusIcon.setImageResource(currentRequest.Status.resolveIconResId());
     }
 
     @Override

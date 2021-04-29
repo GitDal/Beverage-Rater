@@ -1,16 +1,17 @@
 package dk.au.mad21spring.appproject.group6;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 
+import dk.au.mad21spring.appproject.group6.fragments.ListFragment;
+import dk.au.mad21spring.appproject.group6.fragments.RequestFragment;
+
 public class MainActivity extends AppCompatActivity {
+
     private static final String TAG = "MainActivity";
 
     TabLayout mainTabs;

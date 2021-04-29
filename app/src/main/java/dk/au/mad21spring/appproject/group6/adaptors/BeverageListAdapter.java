@@ -1,4 +1,4 @@
-package dk.au.mad21spring.appproject.group6;
+package dk.au.mad21spring.appproject.group6.adaptors;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 
 public class BeverageListAdapter extends RecyclerView.Adapter<BeverageListAdapter.BeverageViewHolder> {

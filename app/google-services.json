@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "377417739738",
+    "firebase_url": "https://beverage-rater-50295-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "beverage-rater-50295",
+    "storage_bucket": "beverage-rater-50295.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377417739738:android:6ae64964158c093cd9e4e3",
+        "android_client_info": {
+          "package_name": "dk.au.mad21spring.appproject.group6"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377417739738-1pp23d7nbn9sikfr9gtcfs0sqhf6nf87.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVzGzWRfxcvnVascXLtqiYwdQhHUnBjAc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377417739738-1pp23d7nbn9sikfr9gtcfs0sqhf6nf87.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -14,24 +14,17 @@ public class RequestDetailsViewModel extends AndroidViewModel {
 
     private BeverageRepository beverageRepository;
     private Beverage beverageRequest;
-    private String requestId;
 
     public RequestDetailsViewModel(@NonNull Application application) {
         super(application);
         beverageRepository = BeverageRepository.getBeverageRepository(application);
     }
 
-    public void SetRequestId(String id) { requestId = id; }
+    public void SetRequestWithId(String id) {
+        beverageRequest = beverageRepository.getBeverageRequest(id);
+    }
 
     public Beverage GetRequest() {
-
-        List<Beverage> beverages = beverageRepository.getAllBeverages();
-
-        for(Beverage b : beverages) {
-            if(b.Id == requestId) {
-                return b;
-            }
-        }
-        return null;
+        return beverageRequest;
     }
 }

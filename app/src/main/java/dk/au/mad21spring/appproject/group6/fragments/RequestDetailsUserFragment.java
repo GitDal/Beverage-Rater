@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -59,7 +58,7 @@ public class RequestDetailsUserFragment extends Fragment {
 
         if (getArguments() != null) {
             String beverageRequestId = getArguments().getString(REQUEST_ID);
-            vm.SetRequestId(beverageRequestId);
+            vm.SetRequestWithId(beverageRequestId);
         }
     }
 
@@ -75,22 +74,12 @@ public class RequestDetailsUserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupUI(view);
+        updateContent(view);
+    }
 
-        Beverage beverageRequest = vm.GetRequest();
-
-        txtBeverageName.setText(beverageRequest.Name);
-        txtBeverageCompanyName.setText(beverageRequest.CompanyName);
-        Glide.with(imgBeverage.getContext()).load(beverageRequest.ImageUrl).into(imgBeverage);
-        txtBeverageInfo.setText(beverageRequest.BeverageInfo);
-
-        if(beverageRequest.Status != RequestStatus.DRAFT) {
-            EditTextExtensions.Disable(txtBeverageName, view.getContext());
-            EditTextExtensions.Disable(txtBeverageCompanyName, view.getContext());
-            EditTextExtensions.Disable(txtBeverageInfo, view.getContext());
-
-            sendRequestBtn.setVisibility(View.GONE);
-            saveBtn.setVisibility(View.GONE);
-        }
+    public void updateShownRequest(String requestId) {
+        vm.SetRequestWithId(requestId);
+        updateContent(getView());
     }
 
     private void setupUI(View view) {
@@ -107,7 +96,35 @@ public class RequestDetailsUserFragment extends Fragment {
         saveBtn.setOnClickListener(v -> {
             Toast.makeText(v.getContext(), "Saving request!", Toast.LENGTH_SHORT).show();
         });
+    }
 
+    private void updateContent(View view) {
+        Beverage beverageRequest = vm.GetRequest();
+        txtBeverageName.setText(beverageRequest.Name);
+        txtBeverageCompanyName.setText(beverageRequest.CompanyName);
+        Glide.with(imgBeverage.getContext()).load(beverageRequest.ImageUrl).into(imgBeverage);
+        txtBeverageInfo.setText(beverageRequest.BeverageInfo);
 
+        changeUIAccordingToStatus(view, beverageRequest.Status);
+    }
+
+    private void changeUIAccordingToStatus(View view, RequestStatus status) {
+        if(status == RequestStatus.DRAFT) {
+            //DRAFT --> user can edit and save/send
+            EditTextExtensions.Enable(txtBeverageName, view.getContext());
+            EditTextExtensions.Enable(txtBeverageCompanyName, view.getContext());
+            EditTextExtensions.Enable(txtBeverageInfo, view.getContext());
+
+            sendRequestBtn.setVisibility(View.VISIBLE);
+            saveBtn.setVisibility(View.VISIBLE);
+        } else {
+            //NOT DRAFT --> readonly view
+            EditTextExtensions.Disable(txtBeverageName, view.getContext());
+            EditTextExtensions.Disable(txtBeverageCompanyName, view.getContext());
+            EditTextExtensions.Disable(txtBeverageInfo, view.getContext());
+
+            sendRequestBtn.setVisibility(View.GONE);
+            saveBtn.setVisibility(View.GONE);
+        }
     }
 }

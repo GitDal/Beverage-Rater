@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/requestDetailsUserConstraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".fragments.RequestDetailsUserFragment">
 
     <Button
         android:id="@+id/requestDetailsUserSaveBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:text="@string/save"
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/requestDetailsUserCompanyName"
-        app:layout_constraintStart_toStartOf="@+id/requestDetailsUserSaveRequestBtn"
-        app:layout_constraintTop_toBottomOf="@+id/requestDetailsUserSaveRequestBtn" />
+        app:layout_constraintStart_toEndOf="@+id/requestDetailsUserInfoTxt"
+        app:layout_constraintTop_toTopOf="@+id/requestDetailsUserInfoTxt" />
 
     <ImageView
         android:id="@+id/requestDetailsUserBeverageImg"
@@ -75,36 +77,32 @@
         android:id="@+id/requestDetailsUserBeverageInfoLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/info_label"
         app:layout_constraintStart_toStartOf="@+id/requestDetailsUserBeverageImg"
         app:layout_constraintTop_toBottomOf="@+id/requestDetailsUserBeverageImg" />
 
     <EditText
         android:id="@+id/requestDetailsUserInfoTxt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="info about the beverage ..."
         android:inputType="textMultiLine"
         android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/requestDetailsUserBeverageInfoLabel"
-        app:layout_constraintTop_toTopOf="@+id/requestDetailsUserBeverageInfoLabel" />
+        app:layout_constraintStart_toStartOf="@+id/requestDetailsUserBeverageInfoLabel"
+        app:layout_constraintTop_toBottomOf="@+id/requestDetailsUserBeverageInfoLabel" />
 
     <Button
         android:id="@+id/requestDetailsUserSaveRequestBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:text="@string/send_request"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/requestDetailsUserCompanyName"
-        app:layout_constraintStart_toEndOf="@+id/requestDetailsUserInfoTxt"
-        app:layout_constraintTop_toTopOf="@+id/requestDetailsUserInfoTxt" />
+        app:layout_constraintEnd_toEndOf="@+id/requestDetailsUserSaveBtn"
+        app:layout_constraintStart_toStartOf="@+id/requestDetailsUserSaveBtn"
+        app:layout_constraintTop_toBottomOf="@+id/requestDetailsUserSaveBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

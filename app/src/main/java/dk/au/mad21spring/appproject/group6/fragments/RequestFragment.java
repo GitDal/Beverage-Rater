@@ -24,8 +24,9 @@ public class RequestFragment extends Fragment implements BeverageRequestAdaptor.
 
     private static final String TAG = "RequestFragment";
 
-    //Fragment Tags
+    //Fragment
     private static final String DETAILS_USER_FRAG = "details_user_fragment";
+    private RequestDetailsUserFragment requestDetailsUserFragment;
 
     RequestViewModel vm;
     RecyclerView rcvList;
@@ -63,12 +64,12 @@ public class RequestFragment extends Fragment implements BeverageRequestAdaptor.
         rcvList.setAdapter(adapter);
         rcvList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.setBeverageRequests(vm.GetRequests());
+
+        initializeFragment();
     }
 
     @Override
     public void onBeverageRequestClicked(int index) {
-        Toast.makeText(getContext(), vm.GetRequests().get(index).Name, Toast.LENGTH_SHORT).show();
-
         Beverage bRequest = vm.GetRequests().get(index);
 
         // begin fragment transaction
@@ -80,8 +81,18 @@ public class RequestFragment extends Fragment implements BeverageRequestAdaptor.
             // always readonly
             // approve/decline buttons
 
+        requestDetailsUserFragment.updateShownRequest(bRequest.Id);
+    }
+
+    private void initializeFragment() {
+        requestDetailsUserFragment = (RequestDetailsUserFragment) getChildFragmentManager().findFragmentByTag(DETAILS_USER_FRAG);
+        if(requestDetailsUserFragment == null){
+            String defaultSelectedRequestId = vm.GetRequests().get(0).Id;
+            requestDetailsUserFragment = RequestDetailsUserFragment.newInstance(defaultSelectedRequestId);
+        }
+
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.requestDetailsContainer, RequestDetailsUserFragment.newInstance(bRequest.Id), DETAILS_USER_FRAG)
+                .replace(R.id.requestDetailsContainer, requestDetailsUserFragment, DETAILS_USER_FRAG)
                 .commit();
     }
 }

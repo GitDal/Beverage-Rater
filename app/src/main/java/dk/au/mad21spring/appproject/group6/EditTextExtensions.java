@@ -7,6 +7,10 @@ import androidx.core.content.ContextCompat;
 
 public class EditTextExtensions {
 
+    public static void Enable(EditText editTextView, Context context) {
+        editTextView.setEnabled(true);
+    }
+
     public static void Disable(EditText editTextView, Context context) {
         editTextView.setEnabled(false);
         editTextView.setTextColor(ContextCompat.getColor(context, R.color.black));

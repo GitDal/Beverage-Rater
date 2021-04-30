@@ -1,5 +1,6 @@
 package dk.au.mad21spring.appproject.group6.adaptors;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class BeverageRequestAdaptor extends RecyclerView.Adapter<BeverageRequest
 
     private IBeverageRequestItemClickedListener listener;
     private List<Beverage> beverageRequestList;
+    private int selectedPosition = 0; //first element in list
 
     public BeverageRequestAdaptor(IBeverageRequestItemClickedListener listener) {
         this.listener = listener;
@@ -46,8 +48,13 @@ public class BeverageRequestAdaptor extends RecyclerView.Adapter<BeverageRequest
 
     @Override
     public void onBindViewHolder(@NonNull BeverageRequestViewHolder holder, int position) {
-        Beverage currentRequest = beverageRequestList.get(position);
+        if(selectedPosition == position) {
+            holder.txtBeverageName.setTextColor(Color.GREEN);
+        } else {
+            holder.txtBeverageName.setTextColor(Color.GRAY);
+        }
 
+        Beverage currentRequest = beverageRequestList.get(position);
         holder.txtBeverageName.setText(currentRequest.Name);
         holder.txtBeverageCompanyName.setText(currentRequest.CompanyName);
         Glide.with(holder.imgBeverage.getContext()).load(currentRequest.ImageUrl).into(holder.imgBeverage);
@@ -84,6 +91,10 @@ public class BeverageRequestAdaptor extends RecyclerView.Adapter<BeverageRequest
 
         @Override
         public void onClick(View v) {
+            notifyItemChanged(selectedPosition);
+            selectedPosition = getLayoutPosition();
+            notifyItemChanged(selectedPosition);
+
             listener.onBeverageRequestClicked(getAdapterPosition());
         }
     }

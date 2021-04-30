@@ -27,6 +27,16 @@ public class BeverageRepository {
         dummyBeverages = getDummyBeverages();
     }
 
+    public Beverage getBeverageRequest(String beverageId) {
+        for(Beverage beverage : dummyBeverages) {
+            if(beverage.Id == beverageId) {
+                return beverage;
+            }
+        }
+
+        return null;
+    }
+
     public List<Beverage> getBeverageRequestsForUser(String userId){
         List<Beverage> userBeverageRequests = new ArrayList<>();
 

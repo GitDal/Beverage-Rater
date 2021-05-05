@@ -63,39 +63,29 @@ public class MainActivity extends AppCompatActivity {
             goToSignIn();
         }
 
+        // Code to get claims from current logged in user - This is only to test - Delete when no longer needed
+        if (auth.getCurrentUser() != null) {
+            auth.getCurrentUser().getIdToken(false).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                @Override
+                public void onSuccess(GetTokenResult result) {
+                    boolean isAdmin = result.getClaims().containsKey("admin");
+                    if (isAdmin) {
+                        Log.d("CLAIM", "contains admin claim");
+                    } else {
+                        Log.d("CLAIM", "no admin claim found");
+                    }
 
-        // we will need to create a node project to give specific users custom claims:
-        // https://stackoverflow.com/questions/60171473/firebase-how-to-set-custom-claim-from-the-console
-        // It cannot be done through android app or firebase console - Has to be done through
-
-        // Code to get claims from current logged in user
-        auth.getCurrentUser().getIdToken(false).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
-
-                for (Map.Entry<String, Object> entry : getTokenResult.getClaims().entrySet()) {
-                    String key = entry.getKey();
-                    Object value = entry.getValue();
-                    Log.d("CLAIM Key", key);
-                    Log.d("CLAIM Obj", value.toString());
-                    boolean containsClaim = getTokenResult.getClaims().containsKey("email_verified"); // Way to check if claim is on user
-                    Object claimObject = getTokenResult.getClaims().get("email_verified"); // Way to check get value of claim
-                    Log.d("CLAIM Test", containsClaim ? "TRUE" : "FALSE");
-                    Log.d("CLAIM Test", claimObject.toString());
-
-
-
+                    if(isAdmin){
+                        boolean isAdmin2 = (boolean) result.getClaims().get("admin"); // This code crashes if no admin claim is on user - So do a check beforehand to see if containsKey("admin")
+                        if (isAdmin) {
+                            Log.d("CLAIM", "admin claim is true");
+                        } else {
+                            Log.d("CLAIM", "admin claim is false");
+                        }
+                    }
                 }
-//                boolean isAdmin = getTokenResult.getClaims().containsKey("admin");
-//                if (isAdmin) {
-//                    // Show admin UI.
-////                            showAdminUI();
-//                } else {
-//                    // Show regular user UI.
-////                            showRegularUI();
-//                }
-            }
-        });
+            });
+        }
     }
 
     private void goToSignIn() {

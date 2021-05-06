@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -55,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         auth = FirebaseAuth.getInstance();
-
-        initializeFragments();
-        setupUI();
-
         if (auth.getCurrentUser() == null) {
             goToSignIn();
         }
+
+        initializeFragments();
+        setupUI();
+        resolveTabPosition(mainTabs.getSelectedTabPosition());
 
         // Code to get claims from current logged in user - This is only to test - Delete when no longer needed
         if (auth.getCurrentUser() != null) {
@@ -93,6 +96,17 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(authIntent, AUTH_ACTIVITY);
     }
 
+    private void initializeFragments() {
+        beverageListFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(BEVERAGE_LIST_FRAG);
+        if (beverageListFragment == null) {
+            beverageListFragment = ListFragment.newInstance("", "");
+        }
+        requestFragment = (RequestFragment) getSupportFragmentManager().findFragmentByTag(REQUESTS_FRAG);
+        if (requestFragment == null) {
+            requestFragment = RequestFragment.newInstance();
+        }
+    }
+
     private void setupUI() {
         mainTabs = findViewById(R.id.mainTabs);
         appbar = findViewById(R.id.mainAppbar);
@@ -101,23 +115,7 @@ public class MainActivity extends AppCompatActivity {
         mainTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.mainFragmentContainter, beverageListFragment, BEVERAGE_LIST_FRAG)
-                                .commit();
-                        break;
-                    case 1:
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.mainFragmentContainter, requestFragment, REQUESTS_FRAG)
-                                .commit();
-                        break;
-                    case 2:
-                        break;
-                    default:
-                        Log.d(TAG, "Unhandled switch case");
-                        break;
-                }
+                resolveTabPosition(tab.getPosition());
             }
 
             @Override
@@ -132,11 +130,47 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void resolveTabPosition(int position) {
+        switch (position) {
+            case 0:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragmentContainter, beverageListFragment, BEVERAGE_LIST_FRAG)
+                        .commit();
+                break;
+            case 1:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragmentContainter, requestFragment, REQUESTS_FRAG)
+                        .commit();
+                break;
+            case 2:
+                break;
+            default:
+                Log.d(TAG, "Unhandled switch case");
+                break;
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.items, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem userNameItem = menu.findItem(R.id.appBarUserNameText);
+
+        if(auth.getCurrentUser() != null) {
+            String username = auth.getCurrentUser().getEmail();
+            TextView usernameTextView = (TextView) userNameItem.getActionView();
+
+            usernameTextView.setText(username);
+            usernameTextView.setTextColor(Color.BLACK);
+            usernameTextView.setTypeface(null, Typeface.BOLD);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -155,29 +189,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initializeFragments() {
-        beverageListFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(BEVERAGE_LIST_FRAG);
-        if (beverageListFragment == null) {
-            beverageListFragment = ListFragment.newInstance("", "");
-        }
-        requestFragment = (RequestFragment) getSupportFragmentManager().findFragmentByTag(REQUESTS_FRAG);
-        if (requestFragment == null) {
-            requestFragment = RequestFragment.newInstance();
-        }
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.mainFragmentContainter, beverageListFragment, BEVERAGE_LIST_FRAG)
-                .add(R.id.mainFragmentContainter, requestFragment, REQUESTS_FRAG)
-                .replace(R.id.mainFragmentContainter, beverageListFragment, BEVERAGE_LIST_FRAG)
-                .commit();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AUTH_ACTIVITY) {
             if (resultCode == RESULT_OK) {
                 if(auth.getCurrentUser() != null){
+                    invalidateOptionsMenu(); //To update action-bar with new username
                     return;
                 }
             }

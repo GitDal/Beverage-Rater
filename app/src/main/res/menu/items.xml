@@ -1,8 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/ic_sign_out"
+        android:id="@+id/appBarUserNameText"
+        android:title="Not logged in"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.TextView" />
+    <item
         android:id="@+id/appbarActionSignOut"
+        android:icon="@drawable/ic_sign_out"
         android:title="@string/appbar_action_signOut"
-        app:showAsAction="never" />
+        app:showAsAction="never|ifRoom" />
 </menu>

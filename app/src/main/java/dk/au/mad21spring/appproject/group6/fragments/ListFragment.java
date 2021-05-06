@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import dk.au.mad21spring.appproject.group6.R;
-import dk.au.mad21spring.appproject.group6.adaptors.BeverageListAdapter;
+import dk.au.mad21spring.appproject.group6.adapters.BeverageListAdapter;
 import dk.au.mad21spring.appproject.group6.viewmodels.ListViewModel;
 
 /**

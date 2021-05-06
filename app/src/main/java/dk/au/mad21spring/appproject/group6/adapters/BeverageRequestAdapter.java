@@ -1,4 +1,4 @@
-package dk.au.mad21spring.appproject.group6.adaptors;
+package dk.au.mad21spring.appproject.group6.adapters;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -14,11 +14,10 @@ import java.util.List;
 
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
-import dk.au.mad21spring.appproject.group6.models.RequestStatus;
 
 import com.bumptech.glide.Glide;
 
-public class BeverageRequestAdaptor extends RecyclerView.Adapter<BeverageRequestAdaptor.BeverageRequestViewHolder> {
+public class BeverageRequestAdapter extends RecyclerView.Adapter<BeverageRequestAdapter.BeverageRequestViewHolder> {
 
     public interface IBeverageRequestItemClickedListener {
         void onBeverageRequestClicked(int index);
@@ -26,15 +25,20 @@ public class BeverageRequestAdaptor extends RecyclerView.Adapter<BeverageRequest
 
     private IBeverageRequestItemClickedListener listener;
     private List<Beverage> beverageRequestList;
-    private int selectedPosition = 0; //first element in list
+    private int selectedPosition; //first element in list
 
-    public BeverageRequestAdaptor(IBeverageRequestItemClickedListener listener) {
+    public BeverageRequestAdapter(IBeverageRequestItemClickedListener listener, int selectedItemPosition) {
         this.listener = listener;
+        selectedPosition = selectedItemPosition;
     }
 
     public void setBeverageRequests(@NonNull List<Beverage> beverageRequests) {
         this.beverageRequestList = beverageRequests;
         notifyDataSetChanged();
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
     }
 
     @NonNull

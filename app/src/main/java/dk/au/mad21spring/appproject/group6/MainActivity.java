@@ -8,28 +8,19 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.fragments.ListFragment;
 import dk.au.mad21spring.appproject.group6.fragments.RequestFragment;
 
@@ -57,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        int sim = getWindow().getAttributes().softInputMode;
+        Log.d(TAG, "onCreate: simInt: " + sim);
+
+
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
             goToSignIn();
@@ -64,7 +59,14 @@ public class MainActivity extends AppCompatActivity {
 
         initializeFragments();
         setupUI();
-        resolveTabPosition(mainTabs.getSelectedTabPosition());
+
+        if(savedInstanceState != null) {
+            int tabPosition = savedInstanceState.getInt(InstanceStateExtras.TAB_POSITION, 0);
+            Log.d(TAG, "onCreate: Received savedInstanceState: tabPosition = " + tabPosition);
+            mainTabs.selectTab(mainTabs.getTabAt(tabPosition));
+        }
+
+        handleTabPosition(mainTabs.getSelectedTabPosition());
 
         // Code to get claims from current logged in user - This is only to test - Delete when no longer needed
         if (auth.getCurrentUser() != null) {
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         mainTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                resolveTabPosition(tab.getPosition());
+                handleTabPosition(tab.getPosition());
             }
 
             @Override
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void resolveTabPosition(int position) {
+    private void handleTabPosition(int position) {
         switch (position) {
             case 0:
                 getSupportFragmentManager().beginTransaction()
@@ -187,6 +189,15 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        int currentTabPosition = mainTabs.getSelectedTabPosition();
+        Log.d(TAG, "onSaveInstanceState: Saving tabPosition = " + currentTabPosition);
+        outState.putInt(InstanceStateExtras.TAB_POSITION, currentTabPosition);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package dk.au.mad21spring.appproject.group6.adaptors;
+package dk.au.mad21spring.appproject.group6.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

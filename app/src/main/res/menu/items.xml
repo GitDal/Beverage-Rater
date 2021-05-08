@@ -4,5 +4,5 @@
         android:icon="@drawable/ic_sign_out"
         android:id="@+id/appbarActionSignOut"
         android:title="@string/appbar_action_signOut"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>

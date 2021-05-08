@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private void initializeFragments() {
         beverageListFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(BEVERAGE_LIST_FRAG);
         if (beverageListFragment == null) {
-            beverageListFragment = ListFragment.newInstance("", "");
+            beverageListFragment = ListFragment.newInstance();
         }
         requestFragment = (RequestFragment) getSupportFragmentManager().findFragmentByTag(REQUESTS_FRAG);
         if (requestFragment == null) {

@@ -13,14 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.view.WindowManager;
 
 import dk.au.mad21spring.appproject.group6.R;
-import dk.au.mad21spring.appproject.group6.adaptors.BeverageRequestAdaptor;
+import dk.au.mad21spring.appproject.group6.adapters.BeverageRequestAdapter;
+import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.viewmodels.RequestViewModel;
 
-public class RequestFragment extends Fragment implements BeverageRequestAdaptor.IBeverageRequestItemClickedListener {
+public class RequestFragment extends Fragment implements BeverageRequestAdapter.IBeverageRequestItemClickedListener {
 
     private static final String TAG = "RequestFragment";
 
@@ -30,7 +31,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdaptor.
 
     RequestViewModel vm;
     RecyclerView rcvList;
-    BeverageRequestAdaptor adapter;
+    BeverageRequestAdapter adapter;
 
     public RequestFragment() {
         // Required empty public constructor
@@ -47,7 +48,14 @@ public class RequestFragment extends Fragment implements BeverageRequestAdaptor.
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: retrieving viewmodel");
         vm = new ViewModelProvider(this).get(RequestViewModel.class);
-        adapter = new BeverageRequestAdaptor(this);
+
+        int selectedPos = (savedInstanceState != null) ?
+                savedInstanceState.getInt(InstanceStateExtras.REQUEST_SELECTED_ITEM_POS, 0) : 0;
+
+        adapter = new BeverageRequestAdapter(this, selectedPos);
+
+        // So that the details fragment is shown correctly when editing text.
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     @Override
@@ -69,6 +77,21 @@ public class RequestFragment extends Fragment implements BeverageRequestAdaptor.
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: Saving selected item position");
+        outState.putInt(InstanceStateExtras.REQUEST_SELECTED_ITEM_POS, adapter.getSelectedPosition());
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onStop() {
+        Log.d(TAG, "onStop: Setting SoftInputMode back to default");
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
+        super.onStop();
+    }
+
+    @Override
     public void onBeverageRequestClicked(int index) {
         Beverage bRequest = vm.GetRequests().get(index);
 
@@ -81,6 +104,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdaptor.
             // always readonly
             // approve/decline buttons
 
+        Log.d(TAG, "onBeverageRequestClicked: updating shown request (Id: " + bRequest.Id + ", Name: " + bRequest.Name + ")");
         requestDetailsUserFragment.updateShownRequest(bRequest.Id);
     }
 
@@ -88,6 +112,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdaptor.
         requestDetailsUserFragment = (RequestDetailsUserFragment) getChildFragmentManager().findFragmentByTag(DETAILS_USER_FRAG);
         if(requestDetailsUserFragment == null){
             String defaultSelectedRequestId = vm.GetRequests().get(0).Id;
+            Log.d(TAG, "initializeFragment: initializing requestDetailsUserFragment (requestId = " + defaultSelectedRequestId + ")");
             requestDetailsUserFragment = RequestDetailsUserFragment.newInstance(defaultSelectedRequestId);
         }
 

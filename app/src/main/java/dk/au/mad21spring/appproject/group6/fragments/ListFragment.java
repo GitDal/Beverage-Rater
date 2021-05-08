@@ -48,7 +48,7 @@ import javax.xml.transform.Result;
 import dk.au.mad21spring.appproject.group6.BarcodeScanningActivity;
 import dk.au.mad21spring.appproject.group6.Constants;
 import dk.au.mad21spring.appproject.group6.R;
-import dk.au.mad21spring.appproject.group6.adaptors.BeverageListAdapter;
+import dk.au.mad21spring.appproject.group6.adapters.BeverageListAdapter;
 import dk.au.mad21spring.appproject.group6.viewmodels.ListViewModel;
 
 import static android.app.Activity.RESULT_OK;

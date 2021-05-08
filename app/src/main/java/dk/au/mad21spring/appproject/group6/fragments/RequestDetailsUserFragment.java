@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,7 +35,6 @@ public class RequestDetailsUserFragment extends Fragment {
     private EditText txtBeverageName, txtBeverageCompanyName, txtBeverageInfo;
     private Button sendRequestBtn, saveBtn;
 
-    // TODO: Rename and change types of parameters
     private String requestId;
 
     public RequestDetailsUserFragment() {
@@ -90,12 +90,8 @@ public class RequestDetailsUserFragment extends Fragment {
 
         sendRequestBtn = view.findViewById(R.id.requestDetailsUserSaveRequestBtn);
         saveBtn = view.findViewById(R.id.requestDetailsUserSaveBtn);
-        sendRequestBtn.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Sending request!", Toast.LENGTH_SHORT).show();
-        });
-        saveBtn.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Saving request!", Toast.LENGTH_SHORT).show();
-        });
+        sendRequestBtn.setOnClickListener(v -> send() );
+        saveBtn.setOnClickListener(v -> save() );
     }
 
     private void updateContent(View view) {
@@ -126,5 +122,26 @@ public class RequestDetailsUserFragment extends Fragment {
             sendRequestBtn.setVisibility(View.GONE);
             saveBtn.setVisibility(View.GONE);
         }
+    }
+
+    private void save() {
+        Toast.makeText(getContext(), "Saving request!", Toast.LENGTH_SHORT).show();
+
+        Beverage beverageRequest = vm.GetRequest();
+
+        beverageRequest.Name = txtBeverageName.getText().toString();
+        beverageRequest.CompanyName = txtBeverageCompanyName.getText().toString();
+        beverageRequest.BeverageInfo = txtBeverageInfo.getText().toString();
+
+        vm.SaveRequest(beverageRequest);
+    }
+
+    private void send() {
+        Toast.makeText(getContext(), "Sending request!", Toast.LENGTH_SHORT).show();
+
+        save();
+
+        Beverage beverageRequest = vm.GetRequest();
+        vm.SendRequest(beverageRequest);
     }
 }

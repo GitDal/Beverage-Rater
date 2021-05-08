@@ -1,6 +1,7 @@
 package dk.au.mad21spring.appproject.group6;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +11,13 @@ import dk.au.mad21spring.appproject.group6.models.RequestStatus;
 
 public class BeverageRepository {
 
+    private static final String TAG = "BeverageRepository";
     private static BeverageRepository instance;
-    private List<Beverage> dummyBeverages;
+    private static List<Beverage> dummyBeverages;
 
     public static BeverageRepository getBeverageRepository(final Context context) {
         if(instance == null) {
+            Log.d(TAG, "getBeverageRepository: Initializing new instance");
             instance = new BeverageRepository(context);
         }
         return instance;
@@ -105,4 +108,14 @@ public class BeverageRepository {
     }
 
 
+    public void save(Beverage beverageToSave) {
+        int index = 0;
+
+        for(Beverage beverage : dummyBeverages) {
+            if(beverage.Id == beverageToSave.Id) {
+                dummyBeverages.set(index, beverageToSave);
+            }
+            index++;
+        }
+    }
 }

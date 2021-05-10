@@ -45,7 +45,7 @@ public class BeverageRequestAdapter extends RecyclerView.Adapter<BeverageRequest
     @Override
     public BeverageRequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_list_item_user, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_list_item, parent, false);
         BeverageRequestViewHolder cvh = new BeverageRequestViewHolder(view, listener);
         return cvh;
     }

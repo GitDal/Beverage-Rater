@@ -3,6 +3,8 @@ package dk.au.mad21spring.appproject.group6;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +25,19 @@ public class BeverageRepository {
         return instance;
     }
 
+    public boolean CurrentUserIsAdmin = false;
+
     private BeverageRepository(Context context) {
         //TODO: link med firebase
 
         //Load dummy data (Så det kun skal genereres en gang)
         dummyBeverages = getDummyBeverages();
+    }
+
+    public void ResolveUserIsAdmin() {
+        FirebaseAuth.getInstance().getCurrentUser().getIdToken(false).addOnSuccessListener(result -> {
+            CurrentUserIsAdmin = result.getClaims().containsKey("admin");
+        });
     }
 
     public Beverage getBeverageRequest(String beverageId) {

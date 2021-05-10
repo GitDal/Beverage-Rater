@@ -3,35 +3,30 @@ package dk.au.mad21spring.appproject.group6;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.fragments.ListFragment;
 import dk.au.mad21spring.appproject.group6.fragments.RequestFragment;
+import dk.au.mad21spring.appproject.group6.viewmodels.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final int AUTH_ACTIVITY = 1;
-
-    TabLayout mainTabs;
-    FirebaseAuth auth;
-    Toolbar appbar;
 
     //Fragment Tags
     private static final String BEVERAGE_LIST_FRAG = "beverage_list_fragment";
@@ -43,14 +38,26 @@ public class MainActivity extends AppCompatActivity {
     private ListFragment beverageListFragment;
     private RequestFragment requestFragment;
 
+    //State
+    MainActivityViewModel vm;
+
+    //UI
+    TabLayout mainTabs;
+    FirebaseAuth auth;
+    Toolbar appbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        vm = new ViewModelProvider(this).get(MainActivityViewModel.class);
+
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
             goToSignIn();
+        } else {
+            vm.ResolveUserIsAdmin();
         }
 
         initializeFragments();
@@ -63,30 +70,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         handleTabPosition(mainTabs.getSelectedTabPosition());
-
-        // Code to get claims from current logged in user - This is only to test - Delete when no longer needed
-        if (auth.getCurrentUser() != null) {
-            auth.getCurrentUser().getIdToken(false).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-                @Override
-                public void onSuccess(GetTokenResult result) {
-                    boolean isAdmin = result.getClaims().containsKey("admin");
-                    if (isAdmin) {
-                        Log.d("CLAIM", "contains admin claim");
-                    } else {
-                        Log.d("CLAIM", "no admin claim found");
-                    }
-
-                    if(isAdmin){
-                        boolean isAdmin2 = (boolean) result.getClaims().get("admin"); // This code crashes if no admin claim is on user - So do a check beforehand to see if containsKey("admin")
-                        if (isAdmin) {
-                            Log.d("CLAIM", "admin claim is true");
-                        } else {
-                            Log.d("CLAIM", "admin claim is false");
-                        }
-                    }
-                }
-            });
-        }
     }
 
     private void goToSignIn() {
@@ -175,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.appbarActionSignOut:
+                vm.SetUserIsAdminToDefault(); //Set to false
                 auth.signOut();
                 goToSignIn();
                 return true;
@@ -202,7 +186,10 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == AUTH_ACTIVITY) {
             if (resultCode == RESULT_OK) {
                 if(auth.getCurrentUser() != null){
-                    invalidateOptionsMenu(); //To update action-bar with new username (onPrepareOptionsMenu gets called again)
+                    invalidateOptionsMenu();    //To update action-bar with new username (onPrepareOptionsMenu gets called again)
+                    mainTabs.selectTab(mainTabs.getTabAt(0)); // Update tab to display default tab
+                    handleTabPosition(0);
+                    vm.ResolveUserIsAdmin();
                     return;
                 }
             }

@@ -15,26 +15,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageRequestAdapter;
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
-import dk.au.mad21spring.appproject.group6.viewmodels.RequestViewModel;
+import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestViewModel;
 
 public class RequestFragment extends Fragment implements BeverageRequestAdapter.IBeverageRequestItemClickedListener {
 
     private static final String TAG = "RequestFragment";
 
     //Fragment
-    private static final String DETAILS_USER_FRAG = "details_user_fragment";
-    private RequestDetailsUserFragment requestDetailsUserFragment;
+    private static final String DETAILS_FRAG = "details_fragment";
+    private RequestDetailsFragment requestDetailsFragment;
 
     RequestViewModel vm;
     RecyclerView rcvList;
     BeverageRequestAdapter adapter;
-    FirebaseAuth auth;
 
     public RequestFragment() {
         // Required empty public constructor
@@ -56,8 +53,6 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
                 savedInstanceState.getInt(InstanceStateExtras.REQUEST_SELECTED_ITEM_POS, 0) : 0;
 
         adapter = new BeverageRequestAdapter(this, selectedPos);
-
-        auth = FirebaseAuth.getInstance();
 
         // So that the details fragment is shown correctly when editing text.
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -112,19 +107,19 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
             // approve/decline buttons
 
         Log.d(TAG, "onBeverageRequestClicked: updating shown request (Id: " + bRequest.Id + ", Name: " + bRequest.Name + ")");
-        requestDetailsUserFragment.updateShownRequest(bRequest.Id);
+        requestDetailsFragment.updateShownRequest(bRequest.Id);
     }
 
     private void initializeFragment() {
-        requestDetailsUserFragment = (RequestDetailsUserFragment) getChildFragmentManager().findFragmentByTag(DETAILS_USER_FRAG);
-        if(requestDetailsUserFragment == null){
+        requestDetailsFragment = (RequestDetailsFragment) getChildFragmentManager().findFragmentByTag(DETAILS_FRAG);
+        if(requestDetailsFragment == null){
             String defaultSelectedRequestId = vm.GetRequests().get(0).Id;
-            Log.d(TAG, "initializeFragment: initializing requestDetailsUserFragment (requestId = " + defaultSelectedRequestId + ")");
-            requestDetailsUserFragment = RequestDetailsUserFragment.newInstance(defaultSelectedRequestId);
+            Log.d(TAG, "initializeFragment: initializing requestDetailsFragment (requestId = " + defaultSelectedRequestId + ")");
+            requestDetailsFragment = RequestDetailsFragment.newInstance(defaultSelectedRequestId);
         }
 
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.requestDetailsContainer, requestDetailsUserFragment, DETAILS_USER_FRAG)
+                .replace(R.id.requestDetailsContainer, requestDetailsFragment, DETAILS_FRAG)
                 .commit();
     }
 }

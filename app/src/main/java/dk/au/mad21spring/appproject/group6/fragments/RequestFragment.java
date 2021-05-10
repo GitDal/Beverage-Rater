@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageRequestAdapter;
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
@@ -32,6 +34,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     RequestViewModel vm;
     RecyclerView rcvList;
     BeverageRequestAdapter adapter;
+    FirebaseAuth auth;
 
     public RequestFragment() {
         // Required empty public constructor
@@ -53,6 +56,8 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
                 savedInstanceState.getInt(InstanceStateExtras.REQUEST_SELECTED_ITEM_POS, 0) : 0;
 
         adapter = new BeverageRequestAdapter(this, selectedPos);
+
+        auth = FirebaseAuth.getInstance();
 
         // So that the details fragment is shown correctly when editing text.
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -94,6 +99,8 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     @Override
     public void onBeverageRequestClicked(int index) {
         Beverage bRequest = vm.GetRequests().get(index);
+
+
 
         // begin fragment transaction
         // if user is user --> BeverageRequestForUser

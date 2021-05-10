@@ -48,10 +48,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        int sim = getWindow().getAttributes().softInputMode;
-        Log.d(TAG, "onCreate: simInt: " + sim);
-
-
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
             goToSignIn();
@@ -206,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == AUTH_ACTIVITY) {
             if (resultCode == RESULT_OK) {
                 if(auth.getCurrentUser() != null){
-                    invalidateOptionsMenu(); //To update action-bar with new username
+                    invalidateOptionsMenu(); //To update action-bar with new username (onPrepareOptionsMenu gets called again)
                     return;
                 }
             }

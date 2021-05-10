@@ -1,80 +1,88 @@
 package dk.au.mad21spring.appproject.group6.fragments;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.mlkit.vision.barcode.Barcode;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import com.google.mlkit.vision.common.InputImage;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.transform.Result;
+
+import dk.au.mad21spring.appproject.group6.BarcodeScanningActivity;
+import dk.au.mad21spring.appproject.group6.Constants;
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageListAdapter;
 import dk.au.mad21spring.appproject.group6.viewmodels.ListViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ListFragment extends Fragment implements BeverageListAdapter.IBeverageClickedListener{
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.CAMERA_SERVICE;
+import static androidx.core.content.ContextCompat.checkSelfPermission;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+public class ListFragment extends Fragment implements BeverageListAdapter.IBeverageClickedListener {
+    private static final int CAMERA_REQUEST = 999;
 
     RecyclerView rcvList;
     BeverageListAdapter adapter;
     ListViewModel vm;
+    ImageView barcodeScannerIcon;
+    SearchView searchBox;
 
-    // Required empty public constructor
     public ListFragment() {
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ListFragment newInstance(String param1, String param2) {
+    public static ListFragment newInstance() {
         ListFragment fragment = new ListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
         rcvList = v.findViewById(R.id.listRecyclerView);
+        barcodeScannerIcon = v.findViewById(R.id.listScanBeverageIcon);
+        searchBox = v.findViewById(R.id.listSearchBeverage);
         return v;
     }
 
@@ -86,21 +94,37 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
         rcvList.setAdapter(adapter);
         rcvList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
         vm = new ViewModelProvider(getActivity()).get(ListViewModel.class);
         adapter.setBeverages(vm.getAllBeverages());
 
-//        vm.getCityWeatherData().observe(this, new Observer<List<CityWeather>>() {
-//            @Override
-//            public void onChanged(List<CityWeather> cityWeathers) {
-//                adapter.setCityWeathers(cityWeathers);
-//            }
-//        });
+        barcodeScannerIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onScannerClicked();
+            }
+        });
+    }
+
+
+    @Override
+    public void onBeverageClicked(int index) {
+        // Open details fragment for selected beverage
+        Toast.makeText(getContext(), vm.getAllBeverages().get(index).Name, Toast.LENGTH_SHORT).show();
+    }
+
+    private void onScannerClicked() {
+        Intent barcodeScannerIntent  = new Intent(getContext(), BarcodeScanningActivity.class);
+        startActivityForResult(barcodeScannerIntent, CAMERA_REQUEST);
     }
 
     @Override
-    public void onBeverageClicked(int index){
-        // Open details fragment for selected beverage
-        Toast.makeText(getContext(), vm.getAllBeverages().get(index).Name, Toast.LENGTH_SHORT).show();
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String barcode = data.getStringExtra(Constants.BARCODE_RESULT);
+                searchBox.setQuery(barcode, true);
+            }
+        }
     }
 }

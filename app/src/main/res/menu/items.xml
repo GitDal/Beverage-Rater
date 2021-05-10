@@ -9,5 +9,5 @@
         android:id="@+id/appbarActionSignOut"
         android:icon="@drawable/ic_sign_out"
         android:title="@string/appbar_action_signOut"
-        app:showAsAction="never|ifRoom" />
+        app:showAsAction="ifRoom" />
 </menu>

@@ -3,6 +3,8 @@ package dk.au.mad21spring.appproject.group6;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.database.DataSnapshot;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.CurrentUser;
 import dk.au.mad21spring.appproject.group6.models.RequestStatus;
 
 public class BeverageRepository {
@@ -30,6 +33,11 @@ public class BeverageRepository {
         }
         return instance;
     }
+
+    public FirebaseAuth auth;
+    public CurrentUser currentUser;
+
+    public boolean CurrentUserIsAdmin = false;
 
     private BeverageRepository(Context context) {
         //TODO: link med firebase
@@ -88,7 +96,7 @@ public class BeverageRepository {
 
     public Beverage getBeverageRequest(String beverageName) {
         for(Beverage beverage : dummyBeverages) {
-            if(beverage.Name == beverageName) {
+            if(beverage.Id == beverageId) {
                 return beverage;
             }
         }
@@ -96,16 +104,28 @@ public class BeverageRepository {
         return null;
     }
 
-    public List<Beverage> getBeverageRequestsForUser(String userId){
+    public List<Beverage> getBeverageRequestsForUser(String userEmail){
         List<Beverage> userBeverageRequests = new ArrayList<>();
 
         for(Beverage beverage : dummyBeverages) {
-            if(beverage.RequestedByUserId == userId) {
+            if(beverage.RequestedByUserId.equals(userEmail)) {
                 userBeverageRequests.add(beverage);
             }
         }
 
         return userBeverageRequests;
+    }
+
+    public List<Beverage> getBeverageRequestsForModerator() {
+        List<Beverage> pendingBeverageRequests = new ArrayList<>();
+
+        for(Beverage beverage : dummyBeverages) {
+            if(beverage.Status == RequestStatus.PENDING) {
+                pendingBeverageRequests.add(beverage);
+            }
+        }
+
+        return pendingBeverageRequests;
     }
 
     public List<Beverage> getAllBeverages(){
@@ -123,21 +143,22 @@ public class BeverageRepository {
 
         String dummyImgUrl = "https://s3-eu-west-2.amazonaws.com/newzimlive/wp-content/uploads/2019/01/09152727/Fizzy-Drinks.jpg";
 
-        // Requested by user with id = "1"
-        Beverage beverage1 = new Beverage("Pepsi Max", "Pepsi Company", "This beverage was first produced in 1946", "", dummyImgUrl, approvedStatusCode, "1");
-        Beverage beverage2 = new Beverage("Coca Cola", "Cola Company", "This beverage is tha bomb", "", dummyImgUrl, approvedStatusCode, "1");
-        Beverage beverage3 = new Beverage("Fanta", "Fanta Company", "Orange", "", dummyImgUrl, approvedStatusCode, "1");
+        // Requested by moderator
+        String adminId = "admin@gmail.com";
+        Beverage beverage1 = new Beverage("1", "Pepsi Max", "Pepsi Company", "This beverage was first produced in 1946", dummyImgUrl, approvedStatusCode, adminId);
+        Beverage beverage2 = new Beverage("2", "Coca Cola", "Cola Company", "This beverage is tha bomb", dummyImgUrl, approvedStatusCode, adminId);
+        Beverage beverage3 = new Beverage("3", "Fanta", "Fanta Company", "Orange", dummyImgUrl, approvedStatusCode, adminId);
+        Beverage beverage4 = new Beverage("4", "Sprite", "Sprite Company", "The sugar content in this drink doesn't cleanse thirst", dummyImgUrl, approvedStatusCode, adminId);
+        Beverage beverage5 = new Beverage("5", "Mountain Dew", "Mountain Dew Broo", "Gamur Juice", dummyImgUrl, approvedStatusCode, adminId);
+        Beverage beverage6 = new Beverage("6", "Dansk Vand", "SodaStream", "Det sunde valg", dummyImgUrl, approvedStatusCode, adminId);
 
-        // Requested by user with id = "2"
-        Beverage beverage4 = new Beverage("Sprite", "Sprite Company", "The sugar content in this drink doesn't cleanse thirst", "", dummyImgUrl, approvedStatusCode, "2");
-        Beverage beverage5 = new Beverage( "Mountain Dew", "Mountain Dew Broo", "Gamur Juice", "", dummyImgUrl, approvedStatusCode, "2");
-        Beverage beverage6 = new Beverage("Dansk Vand", "SodaStream", "Det sunde valg", "", dummyImgUrl, approvedStatusCode, "2");
-
-        // Requested by user with id = "3" (til test af requests)
-        Beverage beverage7 = new Beverage("Blå sodavand", "Mikes basement TM", "Its the best there is!", "", dummyImgUrl, draftStatusCode, "3");
-        Beverage beverage8 = new Beverage("Monster", "Monster Company", "Meget hyper energidrik", "", dummyImgUrl, pendingStatusCode, "3");
-        Beverage beverage9 = new Beverage("HahaLol", "Lolern Company", "Dette er et troll request", "", dummyImgUrl, declinedStatusCode, "3");
-        Beverage beverage10 = new Beverage("Coca Cola Zero", "Cola Company", "Very nice ;)", "", dummyImgUrl, approvedStatusCode, "3");
+        // Requested by user (til test af requests)
+        String userId = "user@gmail.com";
+        Beverage beverage7 = new Beverage("7", "Blå sodavand", "Mikes basement TM", "Its the best there is!", dummyImgUrl, draftStatusCode, userId);
+        Beverage beverage8 = new Beverage("8", "Monster", "Monster Company", "Meget hyper energidrik", dummyImgUrl, pendingStatusCode, userId);
+        Beverage beverage9 = new Beverage("9", "Vand drink", "Havet", "Det er lækkert...", dummyImgUrl, pendingStatusCode, userId);
+        Beverage beverage10 = new Beverage("10", "HahaLol", "Lolern Company", "Dette er et troll request", dummyImgUrl, declinedStatusCode, userId);
+        Beverage beverage11 = new Beverage("11", "Coca Cola Zero", "Cola Company", "Very nice ;)", dummyImgUrl, approvedStatusCode, userId);
 
         // Too lazy to change constructor (Only set globalRating for beverages that are approved)
         beverage1.GlobalRating = 10.0;
@@ -159,6 +180,7 @@ public class BeverageRepository {
         beverages.add(beverage8);
         beverages.add(beverage9);
         beverages.add(beverage10);
+        beverages.add(beverage11);
 
         return beverages;
     }

@@ -19,15 +19,15 @@ import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageRequestAdapter;
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
-import dk.au.mad21spring.appproject.group6.viewmodels.RequestViewModel;
+import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestViewModel;
 
 public class RequestFragment extends Fragment implements BeverageRequestAdapter.IBeverageRequestItemClickedListener {
 
     private static final String TAG = "RequestFragment";
 
     //Fragment
-    private static final String DETAILS_USER_FRAG = "details_user_fragment";
-    private RequestDetailsUserFragment requestDetailsUserFragment;
+    private static final String DETAILS_FRAG = "details_fragment";
+    private RequestDetailsFragment requestDetailsFragment;
 
     RequestViewModel vm;
     RecyclerView rcvList;
@@ -95,29 +95,22 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     public void onBeverageRequestClicked(int index) {
         Beverage bRequest = vm.GetRequests().get(index);
 
-        // begin fragment transaction
-        // if user is user --> BeverageRequestForUser
-            // if the request is draft --> you can edit
-            // else --> readonly
-            // save changes / send request buttons
-        // if user is mod --> BeverageRequestForModerator
-            // always readonly
-            // approve/decline buttons
-
-        Log.d(TAG, "onBeverageRequestClicked: updating shown request (Id: " + bRequest.Name + ", Name: " + bRequest.Name + ")");
-        requestDetailsUserFragment.updateShownRequest(bRequest.Name);
+        Log.d(TAG, "onBeverageRequestClicked: updating shown request (Id: " + bRequest.Id + ", Name: " + bRequest.Name + ")");
+        requestDetailsFragment.updateShownRequest(bRequest.Id);
     }
 
     private void initializeFragment() {
-        requestDetailsUserFragment = (RequestDetailsUserFragment) getChildFragmentManager().findFragmentByTag(DETAILS_USER_FRAG);
-        if(requestDetailsUserFragment == null){
-            String defaultSelectedRequestId = vm.GetRequests().get(0).Name;
-            Log.d(TAG, "initializeFragment: initializing requestDetailsUserFragment (requestId = " + defaultSelectedRequestId + ")");
-            requestDetailsUserFragment = RequestDetailsUserFragment.newInstance(defaultSelectedRequestId);
+        requestDetailsFragment = (RequestDetailsFragment) getChildFragmentManager().findFragmentByTag(DETAILS_FRAG);
+        if(requestDetailsFragment == null){
+            String defaultSelectedRequestId = vm.GetRequests().get(0).Id;
+            Log.d(TAG, "initializeFragment: initializing requestDetailsFragment (requestId = " + defaultSelectedRequestId + ")");
+            requestDetailsFragment = RequestDetailsFragment.newInstance(defaultSelectedRequestId);
+
+            //TODO: If no items in vm, hide detailsFragment
         }
 
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.requestDetailsContainer, requestDetailsUserFragment, DETAILS_USER_FRAG)
+                .replace(R.id.requestDetailsContainer, requestDetailsFragment, DETAILS_FRAG)
                 .commit();
     }
 }

@@ -104,14 +104,14 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
             // always readonly
             // approve/decline buttons
 
-        Log.d(TAG, "onBeverageRequestClicked: updating shown request (Id: " + bRequest.Id + ", Name: " + bRequest.Name + ")");
-        requestDetailsUserFragment.updateShownRequest(bRequest.Id);
+        Log.d(TAG, "onBeverageRequestClicked: updating shown request (Id: " + bRequest.Name + ", Name: " + bRequest.Name + ")");
+        requestDetailsUserFragment.updateShownRequest(bRequest.Name);
     }
 
     private void initializeFragment() {
         requestDetailsUserFragment = (RequestDetailsUserFragment) getChildFragmentManager().findFragmentByTag(DETAILS_USER_FRAG);
         if(requestDetailsUserFragment == null){
-            String defaultSelectedRequestId = vm.GetRequests().get(0).Id;
+            String defaultSelectedRequestId = vm.GetRequests().get(0).Name;
             Log.d(TAG, "initializeFragment: initializing requestDetailsUserFragment (requestId = " + defaultSelectedRequestId + ")");
             requestDetailsUserFragment = RequestDetailsUserFragment.newInstance(defaultSelectedRequestId);
         }

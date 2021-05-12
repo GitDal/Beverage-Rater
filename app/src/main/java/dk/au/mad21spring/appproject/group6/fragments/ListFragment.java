@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,9 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -49,6 +53,8 @@ import dk.au.mad21spring.appproject.group6.BarcodeScanningActivity;
 import dk.au.mad21spring.appproject.group6.Constants;
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageListAdapter;
+import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.RequestStatus;
 import dk.au.mad21spring.appproject.group6.viewmodels.ListViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -62,7 +68,8 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
     BeverageListAdapter adapter;
     ListViewModel vm;
     ImageView barcodeScannerIcon;
-    SearchView searchBox;
+    EditText searchBox;
+    Button addBeverageBtn;
 
     public ListFragment() {
     }
@@ -75,6 +82,7 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     @Override
@@ -82,7 +90,8 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
         View v = inflater.inflate(R.layout.fragment_list, container, false);
         rcvList = v.findViewById(R.id.listRecyclerView);
         barcodeScannerIcon = v.findViewById(R.id.listScanBeverageIcon);
-        searchBox = v.findViewById(R.id.listSearchBeverage);
+        searchBox = v.findViewById(R.id.listSearchBox);
+        addBeverageBtn = v.findViewById(R.id.listAddBeverageButton);
         return v;
     }
 
@@ -95,7 +104,13 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
         rcvList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         vm = new ViewModelProvider(getActivity()).get(ListViewModel.class);
-        adapter.setBeverages(vm.getAllBeverages());
+        vm.getBeverages().observe(getViewLifecycleOwner(), new Observer<List<Beverage>>() {
+            @Override
+            public void onChanged(List<Beverage> beverages) {
+                adapter.setBeverages(beverages);
+            }
+        });
+
 
         barcodeScannerIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,13 +118,36 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
                 onScannerClicked();
             }
         });
+
+        addBeverageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Beverage b = new Beverage(
+                        "Coca-Cola",
+                        "The Coca-Cola Company",
+                        "",
+                        "",
+                        "",
+                        RequestStatus.PENDING.getId(),
+                        "FNQRsSdq6IawAohh9MuxKCFxAxw2"
+                );
+                vm.addBeverage(b);
+                Toast.makeText(getContext(),"Test", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onStop() {
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
+        super.onStop();
     }
 
 
     @Override
     public void onBeverageClicked(int index) {
         // Open details fragment for selected beverage
-        Toast.makeText(getContext(), vm.getAllBeverages().get(index).Name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), vm.getBeverages().getValue().get(index).Name, Toast.LENGTH_SHORT).show();
     }
 
     private void onScannerClicked() {
@@ -123,7 +161,7 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
         if (requestCode == CAMERA_REQUEST) {
             if (resultCode == RESULT_OK) {
                 String barcode = data.getStringExtra(Constants.BARCODE_RESULT);
-                searchBox.setQuery(barcode, true);
+                searchBox.setText(barcode);
             }
         }
     }

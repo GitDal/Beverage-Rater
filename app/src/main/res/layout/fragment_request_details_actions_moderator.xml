@@ -5,7 +5,7 @@
     android:id="@+id/requestDetailsActionsModeratorConstraintLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".fragments.RequestDetailsActionsModeratorFragment">
+    tools:context=".fragments.request.RequestDetailsActionsModeratorFragment">
 
     <Button
         android:id="@+id/requestDetailsActionsModeratorApproveBtn"

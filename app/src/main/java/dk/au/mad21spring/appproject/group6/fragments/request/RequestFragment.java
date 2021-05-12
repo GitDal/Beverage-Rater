@@ -1,4 +1,4 @@
-package dk.au.mad21spring.appproject.group6.fragments;
+package dk.au.mad21spring.appproject.group6.fragments.request;
 
 import android.os.Bundle;
 
@@ -95,17 +95,6 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     public void onBeverageRequestClicked(int index) {
         Beverage bRequest = vm.GetRequests().get(index);
 
-
-
-        // begin fragment transaction
-        // if user is user --> BeverageRequestForUser
-            // if the request is draft --> you can edit
-            // else --> readonly
-            // save changes / send request buttons
-        // if user is mod --> BeverageRequestForModerator
-            // always readonly
-            // approve/decline buttons
-
         Log.d(TAG, "onBeverageRequestClicked: updating shown request (Id: " + bRequest.Id + ", Name: " + bRequest.Name + ")");
         requestDetailsFragment.updateShownRequest(bRequest.Id);
     }
@@ -116,6 +105,8 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
             String defaultSelectedRequestId = vm.GetRequests().get(0).Id;
             Log.d(TAG, "initializeFragment: initializing requestDetailsFragment (requestId = " + defaultSelectedRequestId + ")");
             requestDetailsFragment = RequestDetailsFragment.newInstance(defaultSelectedRequestId);
+
+            //TODO: If no items in vm, hide detailsFragment
         }
 
         getChildFragmentManager().beginTransaction()

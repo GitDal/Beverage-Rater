@@ -20,13 +20,13 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.fragments.ListFragment;
-import dk.au.mad21spring.appproject.group6.fragments.RequestFragment;
+import dk.au.mad21spring.appproject.group6.fragments.request.RequestFragment;
 import dk.au.mad21spring.appproject.group6.viewmodels.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static final int AUTH_ACTIVITY = 1;
+    private static final int AUTH_ACTIVITY = 1001;
 
     //Fragment Tags
     private static final String BEVERAGE_LIST_FRAG = "beverage_list_fragment";
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         if (auth.getCurrentUser() == null) {
             goToSignIn();
         } else {
-            vm.ResolveUserIsAdmin();
+            vm.UpdateCurrentUser();
         }
 
         initializeFragments();
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.appbarActionSignOut:
-                vm.SetUserIsAdminToDefault(); //Set to false
+                vm.RemoveCurrentUser();
                 auth.signOut();
                 goToSignIn();
                 return true;
@@ -186,10 +186,10 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == AUTH_ACTIVITY) {
             if (resultCode == RESULT_OK) {
                 if(auth.getCurrentUser() != null){
-                    invalidateOptionsMenu();    //To update action-bar with new username (onPrepareOptionsMenu gets called again)
+                    invalidateOptionsMenu();                        //To update action-bar with new username (onPrepareOptionsMenu gets called again)
                     mainTabs.selectTab(mainTabs.getTabAt(0)); // Update tab to display default tab
                     handleTabPosition(0);
-                    vm.ResolveUserIsAdmin();
+                    vm.UpdateCurrentUser();
                     return;
                 }
             }

@@ -1,4 +1,4 @@
-package dk.au.mad21spring.appproject.group6.fragments;
+package dk.au.mad21spring.appproject.group6.fragments.request;
 
 import android.os.Bundle;
 import android.util.Log;

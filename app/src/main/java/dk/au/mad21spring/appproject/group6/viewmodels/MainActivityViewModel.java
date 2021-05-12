@@ -16,11 +16,11 @@ public class MainActivityViewModel extends AndroidViewModel {
         beverageRepository = BeverageRepository.getBeverageRepository(application);
     }
 
-    public void ResolveUserIsAdmin() {
-        beverageRepository.ResolveUserIsAdmin();
+    public void UpdateCurrentUser() {
+        beverageRepository.ResolveUser();
     }
 
-    public void SetUserIsAdminToDefault() {
-        beverageRepository.CurrentUserIsAdmin = false;
+    public void RemoveCurrentUser() {
+        beverageRepository.currentUser = null;
     }
 }

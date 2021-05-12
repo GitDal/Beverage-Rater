@@ -1,4 +1,4 @@
-package dk.au.mad21spring.appproject.group6.fragments;
+package dk.au.mad21spring.appproject.group6.fragments.request;
 
 import android.os.Bundle;
 
@@ -15,7 +15,6 @@ import android.widget.Button;
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestDetailsActionsModeratorViewModel;
-import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestDetailsActionsUserViewModel;
 
 public class RequestDetailsActionsModeratorFragment extends Fragment {
 

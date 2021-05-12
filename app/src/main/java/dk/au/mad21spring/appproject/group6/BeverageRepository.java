@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import dk.au.mad21spring.appproject.group6.models.Beverage;
@@ -223,15 +224,11 @@ public class BeverageRepository {
     }
 
     public void delete(String beverageId) {
-        int index = 0;
 
-        for(Beverage beverage : dummyBeverages) {
-            if(beverage.Id == beverageId) {
-                dummyBeverages.remove(index);
-            }
-            index++;
+        Iterator<Beverage> iter = dummyBeverages.iterator();
+        while(iter.hasNext()){
+            if(iter.next().Id.equals(beverageId))
+                iter.remove();
         }
     }
-
-
 }

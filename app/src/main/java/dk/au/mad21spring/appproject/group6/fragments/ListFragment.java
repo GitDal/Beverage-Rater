@@ -46,6 +46,7 @@ import com.google.mlkit.vision.common.InputImage;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.xml.transform.Result;
 
@@ -123,12 +124,12 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
             @Override
             public void onClick(View v) {
                 Beverage b = new Beverage(
+                        UUID.randomUUID().toString(),
                         "Coca-Cola",
-                        "The Coca-Cola Company",
-                        "",
-                        "",
-                        "",
-                        RequestStatus.PENDING.getId(),
+                        "Borat",
+                        "Borat",
+                        "https://soundvenue.com/wp-content/uploads/2020/10/Borat-2-2192x1233.jpg?v=1603479596",
+                        RequestStatus.APPROVED.getId(),
                         "FNQRsSdq6IawAohh9MuxKCFxAxw2"
                 );
                 vm.addBeverage(b);

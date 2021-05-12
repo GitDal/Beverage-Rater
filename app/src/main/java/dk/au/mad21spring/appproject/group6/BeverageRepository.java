@@ -69,7 +69,7 @@ public class BeverageRepository {
     }
 
     public void addBeverage(Beverage beverage){
-        beverageDb.child(beverage.Name).setValue(beverage);
+        beverageDb.child(beverage.Id).setValue(beverage);
     }
 
     public void getAllBeverages(MutableLiveData<List<Beverage>> beverages){

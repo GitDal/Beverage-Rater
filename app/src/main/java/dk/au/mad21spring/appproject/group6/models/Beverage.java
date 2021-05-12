@@ -2,6 +2,7 @@ package dk.au.mad21spring.appproject.group6.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Beverage {
 
@@ -9,12 +10,14 @@ public class Beverage {
     public String Name;
     public String CompanyName;
     public String BeverageInfo;
-    public Number GlobalRating;
+    public Double GlobalRating;
     public List<UserRating> UserRatings;
     public String ImageUrl;
     public List<String> EanNumbers;
     public RequestStatus Status;
     public String RequestedByUserId;
+
+    public Beverage(){}
 
     public Beverage(String id, String name, String companyName, String beverageInfo, String imageUrl, int statusCode, String requestedByUserId) {
         Id = id;

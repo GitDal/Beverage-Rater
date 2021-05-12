@@ -33,32 +33,14 @@
 
     <ImageView
         android:id="@+id/listScanBeverageIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:contentDescription="@string/add_beverage_barcode_scanner_img_description"
         android:src="@drawable/ic_barcode_scanner"
-        app:layout_constraintBottom_toBottomOf="@+id/listSearchBeverage"
+        app:layout_constraintBottom_toBottomOf="@+id/listSearchBox"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/listSearchBeverage" />
-
-    <SearchView
-        android:id="@+id/listSearchBeverage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/listAddBeverageText"
-        app:layout_constraintEnd_toStartOf="@+id/listScanBeverageIcon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listRecyclerView">
-
-    </SearchView>
+        app:layout_constraintTop_toTopOf="@+id/listSearchBox" />
 
     <Button
         android:id="@+id/listAddBeverageButton"
@@ -84,5 +66,17 @@
         app:layout_constraintBottom_toTopOf="@+id/listAddBeverageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/listSearchBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="@string/search_hint"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listRecyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,13 @@ import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +23,7 @@ public class BeverageRepository {
 
     private static final String TAG = "BeverageRepository";
     private static BeverageRepository instance;
+    DatabaseReference beverageDb;
     private static String dummyImgUrl = "https://s3-eu-west-2.amazonaws.com/newzimlive/wp-content/uploads/2019/01/09152727/Fizzy-Drinks.jpg";
     private static List<Beverage> dummyBeverages;
 
@@ -32,6 +40,7 @@ public class BeverageRepository {
 
     private BeverageRepository(Context context) {
         //TODO: link med firebase
+        beverageDb = FirebaseDatabase.getInstance().getReference("beverages");
 
         //Load dummy data (Så det kun skal genereres en gang)
         dummyBeverages = getDummyBeverages();
@@ -57,6 +66,53 @@ public class BeverageRepository {
             Log.d(TAG, "ResolveUser: user resolved: " + currentUser.toString());
         });
     }
+
+    public void addBeverage(Beverage beverage){
+        beverageDb.child(beverage.Name).setValue(beverage);
+    }
+
+    public void getAllBeverages(MutableLiveData<List<Beverage>> beverages){
+        ValueEventListener beveragesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Beverage> beverageList = new ArrayList<Beverage>();
+                for(DataSnapshot beverageSnapshot : snapshot.getChildren()){
+                    beverageList.add(beverageSnapshot.getValue(Beverage.class));
+                }
+                beverages.setValue(beverageList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        beverageDb.addValueEventListener(beveragesListener);
+    }
+
+    public void getAllApprovedBeverages(MutableLiveData<List<Beverage>> beverages){
+        ValueEventListener beveragesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Beverage> beverageList = new ArrayList<Beverage>();
+                for(DataSnapshot beverageSnapshot : snapshot.getChildren()){
+                    Beverage beverage = beverageSnapshot.getValue(Beverage.class);
+                    if(beverage.Status == RequestStatus.APPROVED){
+                        beverageList.add(beverage);
+                    }
+                }
+                beverages.setValue(beverageList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        beverageDb.addValueEventListener(beveragesListener);
+    }
+
+    // Dummy
 
     public Beverage getBeverageRequest(String beverageId) {
         for(Beverage beverage : dummyBeverages) {

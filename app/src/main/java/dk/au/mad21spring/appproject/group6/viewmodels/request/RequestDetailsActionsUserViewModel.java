@@ -1,6 +1,7 @@
 package dk.au.mad21spring.appproject.group6.viewmodels.request;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -8,6 +9,8 @@ import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.RequestStatus;
 
 public class RequestDetailsActionsUserViewModel extends RequestDetailsBaseViewModel {
+
+    private static final String TAG = "ReqDetailsActionsUserVM";
 
     public RequestDetailsActionsUserViewModel(@NonNull Application application) {
         super(application);
@@ -27,5 +30,10 @@ public class RequestDetailsActionsUserViewModel extends RequestDetailsBaseViewMo
         }
         beverageRequest.Status = RequestStatus.PENDING;
         beverageRepository.save(beverageRequest);
+    }
+
+    public void DeleteRequest() {
+        Log.d(TAG, "DeleteRequest: deleting request with id = " + beverageRequest.Id);
+        beverageRepository.delete(beverageRequest.Id);
     }
 }

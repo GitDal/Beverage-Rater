@@ -23,7 +23,7 @@ public class RequestDetailsActionsUserFragment extends Fragment {
     private static final String REQUEST_ID = "request_id";
 
     RequestDetailsActionsUserViewModel vm;
-    Button saveBtn, sendRequestBtn;
+    Button saveBtn, sendRequestBtn, deleteBtn;
 
     public RequestDetailsActionsUserFragment() {
         // Required empty public constructor
@@ -66,8 +66,10 @@ public class RequestDetailsActionsUserFragment extends Fragment {
     private void setupUI(View view) {
         sendRequestBtn = view.findViewById(R.id.requestDetailsActionsUserSendRequestBtn);
         saveBtn = view.findViewById(R.id.requestDetailsActionsUserSaveBtn);
+        deleteBtn = view.findViewById(R.id.requestDetailsActionsUserDeleteRequestBtn);
         sendRequestBtn.setOnClickListener(v -> send() );
         saveBtn.setOnClickListener(v -> save() );
+        deleteBtn.setOnClickListener(v -> delete() );
     }
 
     private void save() {
@@ -89,5 +91,11 @@ public class RequestDetailsActionsUserFragment extends Fragment {
         save();
         Beverage beverageRequest = vm.GetRequest();
         vm.SendRequest(beverageRequest);
+    }
+
+    private void delete() {
+        Toast.makeText(getContext(), "Deleting request!", Toast.LENGTH_SHORT).show();
+
+        vm.DeleteRequest();
     }
 }

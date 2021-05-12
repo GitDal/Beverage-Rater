@@ -26,6 +26,8 @@ import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.common.InputImage;
 
+import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
+
 public class BarcodeScanningActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1010;
@@ -102,7 +104,7 @@ public class BarcodeScanningActivity extends AppCompatActivity {
                                             Barcode barcode = barcodes.get(0);
 
                                             Intent result = new Intent();
-                                            result.putExtra(Constants.BARCODE_RESULT, barcode.getRawValue());
+                                            result.putExtra(ResultExtras.BARCODE_RESULT, barcode.getRawValue());
                                             setResult(RESULT_OK, result);
                                             finish();
                                         }

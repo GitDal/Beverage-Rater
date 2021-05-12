@@ -10,19 +10,31 @@
 
     <Button
         android:id="@+id/requestDetailsActionsUserSaveBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/save"
         app:icon="@drawable/ic_save"
+        app:layout_constraintEnd_toEndOf="@+id/requestDetailsActionsUserSendRequestBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/requestDetailsActionsUserSendRequestBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/send_request"
         app:icon="@drawable/ic_send"
+        app:layout_constraintEnd_toEndOf="@+id/requestDetailsActionsUserDeleteRequestBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/requestDetailsActionsUserSaveBtn" />
+
+    <Button
+        android:id="@+id/requestDetailsActionsUserDeleteRequestBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete"
+        app:icon="@android:drawable/ic_menu_delete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/requestDetailsActionsUserSendRequestBtn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

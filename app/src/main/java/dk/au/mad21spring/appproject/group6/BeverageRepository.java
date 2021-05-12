@@ -16,6 +16,7 @@ public class BeverageRepository {
 
     private static final String TAG = "BeverageRepository";
     private static BeverageRepository instance;
+    private static String dummyImgUrl = "https://s3-eu-west-2.amazonaws.com/newzimlive/wp-content/uploads/2019/01/09152727/Fizzy-Drinks.jpg";
     private static List<Beverage> dummyBeverages;
 
     public static BeverageRepository getBeverageRepository(final Context context) {
@@ -28,8 +29,6 @@ public class BeverageRepository {
 
     public FirebaseAuth auth;
     public CurrentUser currentUser;
-
-    public boolean CurrentUserIsAdmin = false;
 
     private BeverageRepository(Context context) {
         //TODO: link med firebase
@@ -106,8 +105,6 @@ public class BeverageRepository {
         int declinedStatusCode = RequestStatus.DECLINED.getId();
         int approvedStatusCode = RequestStatus.APPROVED.getId();
 
-        String dummyImgUrl = "https://s3-eu-west-2.amazonaws.com/newzimlive/wp-content/uploads/2019/01/09152727/Fizzy-Drinks.jpg";
-
         // Requested by moderator
         String adminId = "admin@gmail.com";
         Beverage beverage1 = new Beverage("1", "Pepsi Max", "Pepsi Company", "This beverage was first produced in 1946", dummyImgUrl, approvedStatusCode, adminId);
@@ -150,6 +147,13 @@ public class BeverageRepository {
         return beverages;
     }
 
+    public void create() {
+        Log.d(TAG, "create: Creating beverageRequest");
+        String bId = "" + (dummyBeverages.size() + 1);
+        Beverage newBeverage = new Beverage(bId, "new draft request", "", "", dummyImgUrl, RequestStatus.DRAFT.getId(), currentUser.Email);
+
+        dummyBeverages.add(newBeverage);
+    }
 
     public void save(Beverage beverageToSave) {
         int index = 0;
@@ -161,4 +165,17 @@ public class BeverageRepository {
             index++;
         }
     }
+
+    public void delete(String beverageId) {
+        int index = 0;
+
+        for(Beverage beverage : dummyBeverages) {
+            if(beverage.Id == beverageId) {
+                dummyBeverages.remove(index);
+            }
+            index++;
+        }
+    }
+
+
 }

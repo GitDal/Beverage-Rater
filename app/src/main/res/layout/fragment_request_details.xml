@@ -86,7 +86,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/requestDetailsInfoTxt"
         app:layout_constraintEnd_toEndOf="@+id/requestDetailsCompanyName"
         app:layout_constraintStart_toEndOf="@+id/requestDetailsInfoTxt"
         app:layout_constraintTop_toTopOf="@+id/requestDetailsInfoTxt">

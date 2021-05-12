@@ -14,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
+
+import java.util.List;
 
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageRequestAdapter;
@@ -32,6 +35,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     RequestViewModel vm;
     RecyclerView rcvList;
     BeverageRequestAdapter adapter;
+    Button addBeverageBtn;
 
     public RequestFragment() {
         // Required empty public constructor
@@ -72,8 +76,21 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         rcvList.setAdapter(adapter);
         rcvList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.setBeverageRequests(vm.GetRequests());
+        addBeverageBtn = view.findViewById(R.id.requestAddBeverageBtn);
+        addBeverageBtn.setOnClickListener(v -> addNewBeverageRequest() );
 
         initializeFragment();
+    }
+
+    public void addNewBeverageRequest() {
+        Log.d(TAG, "addNewBeverageRequest: adding new draft");
+        vm.CreateNewBeverageRequest();
+        List<Beverage> updatedBeverageRequests = vm.GetNewRequests();
+
+        adapter.setBeverageRequests(updatedBeverageRequests);
+        int index = adapter.getItemCount() - 1;
+        adapter.setSelectedPosition(index);
+        requestDetailsFragment.updateShownRequest(updatedBeverageRequests.get(index).Id);
     }
 
     @Override

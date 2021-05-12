@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class Beverage {
 
+    public String Id;
     public String Name;
     public String CompanyName;
     public String BeverageInfo;
@@ -18,7 +19,8 @@ public class Beverage {
 
     public Beverage(){}
 
-    public Beverage(String name, String companyName, String beverageInfo, String eanNumber, String imageUrl, int statusCode, String requestedByUserId) {
+    public Beverage(String id, String name, String companyName, String beverageInfo, String imageUrl, int statusCode, String requestedByUserId) {
+        Id = id;
         Name = name;
         CompanyName = companyName;
         BeverageInfo = beverageInfo;
@@ -27,7 +29,6 @@ public class Beverage {
         GlobalRating = 0.0;
         UserRatings = new ArrayList();
         EanNumbers = new ArrayList();
-        EanNumbers.add(eanNumber);
 
         Status = RequestStatus.fromId(statusCode);
         RequestedByUserId = requestedByUserId;

@@ -47,6 +47,27 @@ public class BeverageRepository {
         dummyBeverages = getDummyBeverages();
     }
 
+    public void ResolveUser() {
+        Log.d(TAG, "ResolveUser: resolving user ...");
+
+        if(auth == null) {
+            auth = FirebaseAuth.getInstance();
+        }
+        if(currentUser == null) {
+            currentUser = new CurrentUser();
+        }
+
+        currentUser.Email = auth.getCurrentUser().getEmail();
+
+        Log.d(TAG, "ResolveUser: Fetching admin-claim ...");
+
+        auth.getCurrentUser().getIdToken(false).addOnSuccessListener(result -> {
+            currentUser.IsAdmin = result.getClaims().containsKey("admin");
+
+            Log.d(TAG, "ResolveUser: user resolved: " + currentUser.toString());
+        });
+    }
+
     public void addBeverage(Beverage beverage){
         beverageDb.child(beverage.Name).setValue(beverage);
     }
@@ -94,7 +115,7 @@ public class BeverageRepository {
 
     // Dummy
 
-    public Beverage getBeverageRequest(String beverageName) {
+    public Beverage getBeverageRequest(String beverageId) {
         for(Beverage beverage : dummyBeverages) {
             if(beverage.Id == beverageId) {
                 return beverage;

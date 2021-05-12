@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.fragments.ListFragment;
-import dk.au.mad21spring.appproject.group6.fragments.request.RequestFragment;
+import dk.au.mad21spring.appproject.group6.fragments.RequestFragment;
 import dk.au.mad21spring.appproject.group6.viewmodels.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {

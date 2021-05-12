@@ -40,6 +40,9 @@ public class BeverageRequestAdapter extends RecyclerView.Adapter<BeverageRequest
     public int getSelectedPosition() {
         return selectedPosition;
     }
+    public void setSelectedPosition(int selectedItemPosition) {
+        selectedPosition = selectedItemPosition;
+    }
 
     @NonNull
     @Override

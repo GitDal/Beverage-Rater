@@ -15,5 +15,6 @@
     <string name="save">Save</string>
     <string name="approve">Approve</string>
     <string name="decline">Decline</string>
+    <string name="delete">Delete</string>
     <string name="search_hint">Search beverages</string>
 </resources>

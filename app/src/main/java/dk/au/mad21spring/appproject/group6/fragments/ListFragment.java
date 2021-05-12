@@ -51,11 +51,12 @@ import java.util.UUID;
 import javax.xml.transform.Result;
 
 import dk.au.mad21spring.appproject.group6.BarcodeScanningActivity;
-import dk.au.mad21spring.appproject.group6.Constants;
+import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageListAdapter;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.RequestStatus;
+import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
 import dk.au.mad21spring.appproject.group6.viewmodels.ListViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -161,7 +162,7 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String barcode = data.getStringExtra(Constants.BARCODE_RESULT);
+                String barcode = data.getStringExtra(ResultExtras.BARCODE_RESULT);
                 searchBox.setText(barcode);
             }
         }

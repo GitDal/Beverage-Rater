@@ -50,4 +50,14 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
 
+    <Button
+        android:id="@+id/requestAddBeverageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/add_beverage_button_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

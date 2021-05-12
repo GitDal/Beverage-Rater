@@ -19,13 +19,23 @@ public class RequestViewModel extends AndroidViewModel {
         super(application);
         beverageRepository = BeverageRepository.getBeverageRepository(application);
 
-        beverageRequests = beverageRepository.currentUser.IsAdmin ?
-                beverageRepository.getBeverageRequestsForModerator() :
-                beverageRepository.getBeverageRequestsForUser(beverageRepository.currentUser.Email);
+        beverageRequests = GetNewRequests();
     }
 
     public List<Beverage> GetRequests() {
         return beverageRequests;
+    }
+
+    public List<Beverage> GetNewRequests() {
+        beverageRequests = beverageRepository.currentUser.IsAdmin ?
+                beverageRepository.getBeverageRequestsForModerator() :
+                beverageRepository.getBeverageRequestsForUser(beverageRepository.currentUser.Email);
+
+        return beverageRequests;
+    }
+
+    public void CreateNewBeverageRequest() {
+        beverageRepository.create();
     }
 
 }

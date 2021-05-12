@@ -11,6 +11,6 @@ public class RequestDetailsViewModel extends RequestDetailsBaseViewModel {
     }
 
     public boolean IsCurrentUserAdmin() {
-        return beverageRepository.CurrentUserIsAdmin;
+        return beverageRepository.currentUser.IsAdmin;
     }
 }

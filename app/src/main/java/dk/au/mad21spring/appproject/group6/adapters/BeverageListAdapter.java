@@ -76,6 +76,10 @@ public class BeverageListAdapter extends RecyclerView.Adapter<BeverageListAdapte
         });
     }
 
+    public List<Beverage> getBeverages() {
+        return beverages;
+    }
+
     @Override
     public int getItemCount() {
         if (beverages == null) {

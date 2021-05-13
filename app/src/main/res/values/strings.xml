@@ -17,4 +17,8 @@
     <string name="decline">Decline</string>
     <string name="delete">Delete</string>
     <string name="search_hint">Search beverages</string>
+    <string name="detailImageContentDesc">Image for showing selected beverage</string>
+    <string name="detailsName">Name :</string>
+    <string name="detailsCompany">Company :</string>
+    <string name="detailsDescription">Description :</string>
 </resources>

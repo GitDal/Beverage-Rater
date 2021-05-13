@@ -22,7 +22,6 @@ import java.util.List;
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageRequestAdapter;
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
-import dk.au.mad21spring.appproject.group6.fragments.request.RequestDetailsFragment;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestViewModel;
 

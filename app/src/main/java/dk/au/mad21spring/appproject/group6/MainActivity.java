@@ -1,5 +1,10 @@
 package dk.au.mad21spring.appproject.group6;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -19,7 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
-import dk.au.mad21spring.appproject.group6.fragments.ListFragment;
+import dk.au.mad21spring.appproject.group6.fragments.wrapper.WrapperFragment;
 import dk.au.mad21spring.appproject.group6.fragments.request.RequestFragment;
 import dk.au.mad21spring.appproject.group6.viewmodels.MainActivityViewModel;
 
@@ -29,13 +34,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int AUTH_ACTIVITY = 1001;
 
     //Fragment Tags
-    private static final String BEVERAGE_LIST_FRAG = "beverage_list_fragment";
-    private static final String BEVERAGE_DETAILS_FRAG = "beverage_details_fragment";
+    private static final String WRAPPER_FRAG = "wrapper_fragment";
     private static final String REQUESTS_FRAG = "requests_fragment";
     private static final String PROFILE_FRAG = "profile_fragment";
 
-    //Fragments
-    private ListFragment beverageListFragment;
+    //Fragment
+    private WrapperFragment wrapperFragment;
     private RequestFragment requestFragment;
 
     //State
@@ -78,10 +82,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeFragments() {
-        beverageListFragment = (ListFragment) getSupportFragmentManager().findFragmentByTag(BEVERAGE_LIST_FRAG);
-        if (beverageListFragment == null) {
-            beverageListFragment = ListFragment.newInstance();
+        wrapperFragment = (WrapperFragment) getSupportFragmentManager().findFragmentByTag(WRAPPER_FRAG);
+        if (wrapperFragment == null) {
+            wrapperFragment = WrapperFragment.newInstance();
         }
+
         requestFragment = (RequestFragment) getSupportFragmentManager().findFragmentByTag(REQUESTS_FRAG);
         if (requestFragment == null) {
             requestFragment = RequestFragment.newInstance();
@@ -115,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         switch (position) {
             case 0:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mainFragmentContainter, beverageListFragment, BEVERAGE_LIST_FRAG)
+                        .replace(R.id.mainFragmentContainter, wrapperFragment, WRAPPER_FRAG)
                         .commit();
                 break;
             case 1:
@@ -198,6 +203,13 @@ public class MainActivity extends AppCompatActivity {
         // Force user to log in or sign up to use app
         if (auth.getCurrentUser() == null) {
             goToSignIn();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!wrapperFragment.handlesOnBackPressed()){
+            super.onBackPressed();
         }
     }
 }

@@ -95,12 +95,14 @@ public class BeverageRepository {
 
     public void getAllBeverages(MutableLiveData<List<Beverage>> beverages){
         ValueEventListener beveragesListener = new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Beverage> beverageList = new ArrayList<Beverage>();
                 for(DataSnapshot beverageSnapshot : snapshot.getChildren()){
                     beverageList.add(beverageSnapshot.getValue(Beverage.class));
                 }
+                beverageList.sort((o1, o2) -> (int) (o2.GlobalRating - o1.GlobalRating));
                 beverages.setValue(beverageList);
             }
 
@@ -114,6 +116,7 @@ public class BeverageRepository {
 
     public void getAllApprovedBeverages(MutableLiveData<List<Beverage>> beverages){
         ValueEventListener beveragesListener = new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Beverage> beverageList = new ArrayList<Beverage>();
@@ -123,6 +126,7 @@ public class BeverageRepository {
                         beverageList.add(beverage);
                     }
                 }
+                beverageList.sort((o1, o2) -> (int) (o2.GlobalRating - o1.GlobalRating));
                 beverages.setValue(beverageList);
             }
 

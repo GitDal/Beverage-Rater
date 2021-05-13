@@ -1,6 +1,7 @@
 package dk.au.mad21spring.appproject.group6.adapters;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.ListIterator;
 
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
@@ -23,25 +25,56 @@ public class BeverageRequestAdapter extends RecyclerView.Adapter<BeverageRequest
         void onBeverageRequestClicked(int index);
     }
 
+    private static final String TAG = "BeverageRequestAdapter";
     private IBeverageRequestItemClickedListener listener;
     private List<Beverage> beverageRequestList;
-    private int selectedPosition; //first element in list
+    private int selectedPosition;
 
     public BeverageRequestAdapter(IBeverageRequestItemClickedListener listener, int selectedItemPosition) {
         this.listener = listener;
         selectedPosition = selectedItemPosition;
     }
 
+    public List<Beverage> getBeverageRequests() { return beverageRequestList; }
     public void setBeverageRequests(@NonNull List<Beverage> beverageRequests) {
-        this.beverageRequestList = beverageRequests;
+        if(beverageRequestList != null && getItemCount() != beverageRequests.size()) {
+            //List size changed:
+            Log.d(TAG, "setBeverageRequests: List size changed from " + getItemCount() + " to " + beverageRequests.size());
+            String id = getSelectedBeverage() != null ? getSelectedBeverage().Id : "";
+            this.beverageRequestList = beverageRequests;
+            setSelectedBeverage(id);
+        } else {
+            this.beverageRequestList = beverageRequests;
+        }
+
+        if(getSelectedBeverage() == null) {
+            selectedPosition = 0;
+        }
+
         notifyDataSetChanged();
     }
 
     public int getSelectedPosition() {
         return selectedPosition;
     }
-    public void setSelectedPosition(int selectedItemPosition) {
-        selectedPosition = selectedItemPosition;
+
+    public Beverage getSelectedBeverage() {
+        if(0 > selectedPosition || selectedPosition > (getItemCount() - 1)) {
+            return null;
+        }
+
+        return beverageRequestList.get(selectedPosition);
+    }
+
+    public void setSelectedBeverage(String requestId) {
+        ListIterator<Beverage> it = beverageRequestList.listIterator();
+        while(it.hasNext()) {
+            Beverage beverage = it.next();
+            if(beverage.Id.equals(requestId)) {
+                selectedPosition = beverageRequestList.indexOf(beverage);
+                return;
+            }
+        }
     }
 
     @NonNull

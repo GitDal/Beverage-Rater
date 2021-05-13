@@ -3,39 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/requestDetailsActionsUserConstraintLayout"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="fill_vertical"
     tools:context=".fragments.request.RequestDetailsActionsUserFragment">
 
     <Button
         android:id="@+id/requestDetailsActionsUserSaveBtn"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/save"
         android:textSize="14sp"
         app:icon="@drawable/ic_save"
-        app:layout_constraintEnd_toEndOf="@+id/requestDetailsActionsUserSendRequestBtn"
+        app:iconGravity="textEnd"
+        app:iconPadding="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:tooltipText="Save" />
 
     <Button
         android:id="@+id/requestDetailsActionsUserSendRequestBtn"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/send_request"
         app:icon="@drawable/ic_send"
-        app:layout_constraintEnd_toEndOf="@+id/requestDetailsActionsUserDeleteRequestBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/requestDetailsActionsUserSaveBtn" />
+        app:iconGravity="textEnd"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/requestDetailsActionsUserSaveBtn"
+        app:layout_constraintEnd_toStartOf="@+id/requestDetailsActionsUserDeleteRequestBtn"
+        app:layout_constraintStart_toEndOf="@+id/requestDetailsActionsUserSaveBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        android:tooltipText="Send"/>
 
     <Button
         android:id="@+id/requestDetailsActionsUserDeleteRequestBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/delete"
         app:icon="@android:drawable/ic_menu_delete"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/requestDetailsActionsUserSendRequestBtn" />
+        app:iconGravity="textEnd"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/requestDetailsActionsUserSendRequestBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/requestDetailsActionsUserSendRequestBtn"
+        android:tooltipText="Delete"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package dk.au.mad21spring.appproject.group6.models;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Beverage {
 
@@ -19,8 +20,8 @@ public class Beverage {
 
     public Beverage(){}
 
-    public Beverage(String id, String name, String companyName, String beverageInfo, String imageUrl, int statusCode, String requestedByUserId) {
-        Id = id;
+    public Beverage(String name, String companyName, String beverageInfo, String imageUrl, int statusCode, String requestedByUserId) {
+        Id = UUID.randomUUID().toString();
         Name = name;
         CompanyName = companyName;
         BeverageInfo = beverageInfo;

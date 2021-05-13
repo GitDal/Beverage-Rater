@@ -27,7 +27,7 @@ public class RequestDetailsFragment extends Fragment {
     private static final String TAG = "RequestDetailsFrag";
     private static final String REQUEST_ID = "request_id";
 
-    //Fragment
+    //Fragments
     private static final String ACTIONS_USER_FRAG = "actions_user_fragment";
     private static final String ACTIONS_MODERATOR_FRAG = "actions_moderator_fragment";
     private RequestDetailsActionsUserFragment requestDetailsActionsUserFragment;
@@ -61,7 +61,7 @@ public class RequestDetailsFragment extends Fragment {
 
         if (getArguments() != null) {
             String beverageRequestId = getArguments().getString(REQUEST_ID);
-            vm.SetRequestWithId(beverageRequestId);
+            vm.setRequestWithId(beverageRequestId);
         }
     }
 
@@ -84,13 +84,13 @@ public class RequestDetailsFragment extends Fragment {
     private void initializeFragments() {
         requestDetailsActionsUserFragment = (RequestDetailsActionsUserFragment) getChildFragmentManager().findFragmentByTag(ACTIONS_USER_FRAG);
         if(requestDetailsActionsUserFragment == null){
-            String requestId = vm.GetRequest().Id;
+            String requestId = vm.getRequestId();
             Log.d(TAG, "initializeFragments: initializing requestDetailsActionsUserFragment (requestId = " + requestId + ")");
             requestDetailsActionsUserFragment = RequestDetailsActionsUserFragment.newInstance(requestId);
         }
         requestDetailsActionsModeratorFragment = (RequestDetailsActionsModeratorFragment) getChildFragmentManager().findFragmentByTag(ACTIONS_MODERATOR_FRAG);
         if(requestDetailsActionsModeratorFragment == null){
-            String requestId = vm.GetRequest().Id;
+            String requestId = vm.getRequestId();
             Log.d(TAG, "initializeFragments: initializing requestDetailsActionsModeratorFragment (requestId = " + requestId + ")");
             requestDetailsActionsModeratorFragment = RequestDetailsActionsModeratorFragment.newInstance(requestId);
         }
@@ -106,13 +106,15 @@ public class RequestDetailsFragment extends Fragment {
         }
     }
 
+    public String getCurrentRequestId() { return vm.getRequestId(); }
+
     public void updateShownRequest(String requestId) {
-        vm.SetRequestWithId(requestId);
+        vm.setRequestWithId(requestId);
 
         if(vm.IsCurrentUserAdmin()) {
-            requestDetailsActionsModeratorFragment.vm.SetRequestWithId(requestId);
+            requestDetailsActionsModeratorFragment.vm.setRequestWithId(requestId);
         } else {
-            requestDetailsActionsUserFragment.vm.SetRequestWithId(requestId);
+            requestDetailsActionsUserFragment.vm.setRequestWithId(requestId);
         }
 
         updateContent(getView());
@@ -126,13 +128,17 @@ public class RequestDetailsFragment extends Fragment {
     }
 
     private void updateContent(View view) {
-        Beverage beverageRequest = vm.GetRequest();
-        txtBeverageName.setText(beverageRequest.Name);
-        txtBeverageCompanyName.setText(beverageRequest.CompanyName);
-        Glide.with(imgBeverage.getContext()).load(beverageRequest.ImageUrl).into(imgBeverage);
-        txtBeverageInfo.setText(beverageRequest.BeverageInfo);
+        vm.getRequest().observe(getViewLifecycleOwner(), beverageRequest -> {
+            if(beverageRequest != null) {
+                Log.d(TAG, "updateContent: Updating content");
+                txtBeverageName.setText(beverageRequest.Name);
+                txtBeverageCompanyName.setText(beverageRequest.CompanyName);
+                Glide.with(imgBeverage.getContext()).load(beverageRequest.ImageUrl).into(imgBeverage);
+                txtBeverageInfo.setText(beverageRequest.BeverageInfo);
 
-        changeUIAccordingToStatusAndRole(view, beverageRequest.Status);
+                changeUIAccordingToStatusAndRole(view, beverageRequest.Status);
+            }
+        });
     }
 
     private void changeUIAccordingToStatusAndRole(View view, RequestStatus status) {

@@ -1,10 +1,11 @@
-package dk.au.mad21spring.appproject.group6.fragments;
+package dk.au.mad21spring.appproject.group6.fragments.request;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +34,11 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     private static final String DETAILS_FRAG = "details_fragment";
     private RequestDetailsFragment requestDetailsFragment;
 
+    //State
     RequestViewModel vm;
+    String latestAddedRequestId = null;
+
+    //UI
     RecyclerView rcvList;
     BeverageRequestAdapter adapter;
     Button addBeverageBtn;
@@ -42,7 +47,6 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static RequestFragment newInstance() {
         RequestFragment fragment = new RequestFragment();
         return fragment;
@@ -76,22 +80,32 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         rcvList = view.findViewById(R.id.requestRcv);
         rcvList.setAdapter(adapter);
         rcvList.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter.setBeverageRequests(vm.GetRequests());
+
         addBeverageBtn = view.findViewById(R.id.requestAddBeverageBtn);
         addBeverageBtn.setOnClickListener(v -> addNewBeverageRequest() );
 
-        initializeFragment();
+        vm.GetRequests().observe(getViewLifecycleOwner(), beverages -> handleOnNewRequestsReceived(beverages) );
     }
 
-    public void addNewBeverageRequest() {
-        Log.d(TAG, "addNewBeverageRequest: adding new draft");
-        vm.CreateNewBeverageRequest();
-        List<Beverage> updatedBeverageRequests = vm.GetNewRequests();
+    private void handleOnNewRequestsReceived(List<Beverage> updatedBeverages) {
+        Log.d(TAG, "handleOnNewRequestsReceived: updating adapter with beverages");
 
-        adapter.setBeverageRequests(updatedBeverageRequests);
-        int index = adapter.getItemCount() - 1;
-        adapter.setSelectedPosition(index);
-        requestDetailsFragment.updateShownRequest(updatedBeverageRequests.get(index).Id);
+        adapter.setBeverageRequests(updatedBeverages);
+
+        if(latestAddedRequestId != null) {
+            adapter.setSelectedBeverage(latestAddedRequestId);
+            latestAddedRequestId = null;
+        }
+
+        if(adapter.getSelectedBeverage() != null) {
+            initializeFragment(adapter.getSelectedBeverage().Id);
+        }
+    }
+
+    private void addNewBeverageRequest() {
+        Log.d(TAG, "addNewBeverageRequest: adding new draft");
+        String id = vm.CreateNewBeverageRequest();
+        latestAddedRequestId = id;
     }
 
     @Override
@@ -111,24 +125,33 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
 
     @Override
     public void onBeverageRequestClicked(int index) {
-        Beverage bRequest = vm.GetRequests().get(index);
-
+        Beverage bRequest = adapter.getBeverageRequests().get(index);
         Log.d(TAG, "onBeverageRequestClicked: updating shown request (Id: " + bRequest.Id + ", Name: " + bRequest.Name + ")");
-        requestDetailsFragment.updateShownRequest(bRequest.Id);
+
+        if(requestDetailsFragment == null) {
+            initializeFragment(bRequest.Id);
+        } else {
+            requestDetailsFragment.updateShownRequest(bRequest.Id);
+        }
     }
 
-    private void initializeFragment() {
+    private void initializeFragment(String requestId) {
         requestDetailsFragment = (RequestDetailsFragment) getChildFragmentManager().findFragmentByTag(DETAILS_FRAG);
         if(requestDetailsFragment == null){
-            String defaultSelectedRequestId = vm.GetRequests().get(0).Id;
-            Log.d(TAG, "initializeFragment: initializing requestDetailsFragment (requestId = " + defaultSelectedRequestId + ")");
-            requestDetailsFragment = RequestDetailsFragment.newInstance(defaultSelectedRequestId);
-
-            //TODO: If no items in vm, hide detailsFragment
+            Log.d(TAG, "initializeFragment: initializing requestDetailsFragment (requestId = " + requestId + ")");
+            requestDetailsFragment = RequestDetailsFragment.newInstance(requestId);
+            showFragment();
+        } else if(requestDetailsFragment.getCurrentRequestId() != requestId) {
+            Log.d(TAG, "initializeFragment: updating requestDetailsFragment (requestId = " + requestId + ")");
+            requestDetailsFragment.updateShownRequest(requestId);
         }
+    }
 
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.requestDetailsContainer, requestDetailsFragment, DETAILS_FRAG)
-                .commit();
+    private void showFragment() {
+        if(requestDetailsFragment != null) {
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.requestDetailsContainer, requestDetailsFragment, DETAILS_FRAG)
+                    .commit();
+        }
     }
 }

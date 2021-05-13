@@ -45,7 +45,7 @@ public class RequestDetailsActionsUserFragment extends Fragment {
 
         if (getArguments() != null) {
             String beverageRequestId = getArguments().getString(REQUEST_ID);
-            vm.SetRequestWithId(beverageRequestId);
+            vm.setRequestWithId(beverageRequestId);
         }
     }
 
@@ -76,7 +76,7 @@ public class RequestDetailsActionsUserFragment extends Fragment {
         Toast.makeText(getContext(), "Saving request!", Toast.LENGTH_SHORT).show();
 
         BeverageRequestDetailsDTO formData = ((RequestDetailsFragment) getParentFragment()).getBeverageFormData();
-        Beverage beverageRequest = vm.GetRequest();
+        Beverage beverageRequest = vm.getRequest().getValue();
 
         beverageRequest.Name = formData.Name;
         beverageRequest.CompanyName = formData.CompanyName;
@@ -89,7 +89,7 @@ public class RequestDetailsActionsUserFragment extends Fragment {
         Toast.makeText(getContext(), "Sending request!", Toast.LENGTH_SHORT).show();
 
         save();
-        Beverage beverageRequest = vm.GetRequest();
+        Beverage beverageRequest = vm.getRequest().getValue();
         vm.SendRequest(beverageRequest);
     }
 

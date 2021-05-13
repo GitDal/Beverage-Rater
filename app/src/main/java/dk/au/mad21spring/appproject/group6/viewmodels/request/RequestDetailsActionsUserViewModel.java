@@ -21,7 +21,7 @@ public class RequestDetailsActionsUserViewModel extends RequestDetailsBaseViewMo
         if(beverageRequest.Status != RequestStatus.DRAFT) {
             return;
         }
-        beverageRepository.save(beverageRequest);
+        beverageRepository.updateBeverage(beverageRequest);
     }
 
     public void SendRequest(Beverage beverageRequest) {
@@ -29,11 +29,13 @@ public class RequestDetailsActionsUserViewModel extends RequestDetailsBaseViewMo
             return;
         }
         beverageRequest.Status = RequestStatus.PENDING;
-        beverageRepository.save(beverageRequest);
+        beverageRepository.updateBeverage(beverageRequest);
     }
 
     public void DeleteRequest() {
-        Log.d(TAG, "DeleteRequest: deleting request with id = " + beverageRequest.Id);
-        beverageRepository.delete(beverageRequest.Id);
+        String beverageId = beverageRequest.getValue().Id;
+
+        Log.d(TAG, "DeleteRequest: deleting request with id = " + beverageId);
+        beverageRepository.deleteBeverage(beverageId);
     }
 }

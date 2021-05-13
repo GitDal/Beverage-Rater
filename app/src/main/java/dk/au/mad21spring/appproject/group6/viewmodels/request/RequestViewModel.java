@@ -4,38 +4,48 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
 import dk.au.mad21spring.appproject.group6.BeverageRepository;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.RequestStatus;
 
 public class RequestViewModel extends AndroidViewModel {
 
     private BeverageRepository beverageRepository;
-    private List<Beverage> beverageRequests;
+    private MutableLiveData<List<Beverage>> beverageRequests;
 
     public RequestViewModel(@NonNull Application application) {
         super(application);
         beverageRepository = BeverageRepository.getBeverageRepository(application);
-
-        beverageRequests = GetNewRequests();
+        beverageRequests = new MutableLiveData<>();
     }
 
-    public List<Beverage> GetRequests() {
+    public LiveData<List<Beverage>> GetRequests() {
+        if(beverageRepository.currentUser.IsAdmin) {
+            beverageRepository.getAllPendingBeverages(beverageRequests);
+        } else {
+            beverageRepository.getAllBeveragesRequestedByUser(beverageRequests);
+        }
+
         return beverageRequests;
     }
 
-    public List<Beverage> GetNewRequests() {
-        beverageRequests = beverageRepository.currentUser.IsAdmin ?
-                beverageRepository.getBeverageRequestsForModerator() :
-                beverageRepository.getBeverageRequestsForUser(beverageRepository.currentUser.Email);
+    public LiveData<List<Beverage>> GetNewRequests() {
+
 
         return beverageRequests;
     }
 
-    public void CreateNewBeverageRequest() {
-        beverageRepository.create();
+    public String CreateNewBeverageRequest() {
+        String defaultImageUrl = "https://s3-eu-west-2.amazonaws.com/newzimlive/wp-content/uploads/2019/01/09152727/Fizzy-Drinks.jpg";
+        Beverage beverageRequest = new Beverage("untitled product", "", "", defaultImageUrl, RequestStatus.DRAFT.getId(), beverageRepository.currentUser.Email);
+
+        beverageRepository.addBeverage(beverageRequest);
+        return beverageRequest.Id;
     }
 
 }

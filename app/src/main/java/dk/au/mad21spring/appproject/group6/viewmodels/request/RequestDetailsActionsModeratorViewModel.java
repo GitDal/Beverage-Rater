@@ -15,11 +15,11 @@ public class RequestDetailsActionsModeratorViewModel extends RequestDetailsBaseV
 
     public void approveRequest(Beverage beverageRequest) {
         beverageRequest.Status = RequestStatus.APPROVED;
-        beverageRepository.save(beverageRequest);
+        beverageRepository.updateBeverage(beverageRequest);
     }
 
     public void declineRequest(Beverage beverageRequest) {
         beverageRequest.Status = RequestStatus.DECLINED;
-        beverageRepository.save(beverageRequest);
+        beverageRepository.updateBeverage(beverageRequest);
     }
 }

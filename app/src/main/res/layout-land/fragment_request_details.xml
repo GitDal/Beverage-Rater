@@ -69,24 +69,26 @@
 
     <EditText
         android:id="@+id/requestDetailsInfoTxt"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="start|top"
         android:hint="info about the beverage ..."
         android:inputType="textMultiLine"
+        android:maxLines="3"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/requestDetailsCompanyName"
         app:layout_constraintStart_toStartOf="@+id/requestDetailsBeverageInfoLabel"
         app:layout_constraintTop_toBottomOf="@+id/requestDetailsBeverageInfoLabel" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/requestDetailsActionsContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/requestDetailsCompanyName"
-        app:layout_constraintStart_toEndOf="@+id/requestDetailsInfoTxt"
-        app:layout_constraintTop_toTopOf="@+id/requestDetailsInfoTxt">
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/requestDetailsInfoTxt"
+        app:layout_constraintStart_toStartOf="@+id/requestDetailsInfoTxt"
+        app:layout_constraintTop_toBottomOf="@+id/requestDetailsInfoTxt">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

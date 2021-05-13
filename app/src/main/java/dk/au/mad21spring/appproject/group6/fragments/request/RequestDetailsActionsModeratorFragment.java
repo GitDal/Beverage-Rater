@@ -43,7 +43,7 @@ public class RequestDetailsActionsModeratorFragment extends Fragment {
 
         if (getArguments() != null) {
             String beverageRequestId = getArguments().getString(REQUEST_ID);
-            vm.SetRequestWithId(beverageRequestId);
+            vm.setRequestWithId(beverageRequestId);
         }
     }
 
@@ -69,12 +69,12 @@ public class RequestDetailsActionsModeratorFragment extends Fragment {
     }
 
     private void approve() {
-        Beverage beverageRequest = vm.GetRequest();
+        Beverage beverageRequest = vm.getRequest().getValue();
         vm.approveRequest(beverageRequest);
     }
 
     private void decline() {
-        Beverage beverageRequest = vm.GetRequest();
+        Beverage beverageRequest = vm.getRequest().getValue();
         vm.declineRequest(beverageRequest);
     }
 }

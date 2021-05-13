@@ -1,10 +1,5 @@
 package dk.au.mad21spring.appproject.group6;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -15,12 +10,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.fragments.ListFragment;
-import dk.au.mad21spring.appproject.group6.fragments.RequestFragment;
+import dk.au.mad21spring.appproject.group6.fragments.request.RequestFragment;
 import dk.au.mad21spring.appproject.group6.viewmodels.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {

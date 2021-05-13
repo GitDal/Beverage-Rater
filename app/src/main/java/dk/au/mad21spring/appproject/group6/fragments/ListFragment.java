@@ -125,7 +125,6 @@ public class ListFragment extends Fragment implements BeverageListAdapter.IBever
             @Override
             public void onClick(View v) {
                 Beverage b = new Beverage(
-                        UUID.randomUUID().toString(),
                         "Coca-Cola",
                         "Borat",
                         "Borat",

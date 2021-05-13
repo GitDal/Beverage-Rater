@@ -88,8 +88,9 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
         vm.getSelectedBeverageIndex().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer index) {
-                if (vm.getBeverages().getValue() != null) {
-                    detailsFragment.setBeverage(listFragment.getAdapterList().get(index));
+                List<Beverage> beverages = listFragment.getAdapterList();
+                if(beverages != null){
+                    detailsFragment.setBeverage(beverages.get(index));
                 }
             }
         });

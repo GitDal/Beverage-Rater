@@ -26,8 +26,7 @@ public class WrapperViewModel extends AndroidViewModel {
         _selectedBeverageIndex = new MutableLiveData<Integer>(0);
         _query = new MutableLiveData<String>("");
         _beverages = new MutableLiveData<List<Beverage>>();
-        _beverageRepository.getAllBeverages(_beverages);
-//            _beverageRepository.getAllApprovedBeverages(_beverages);
+        _beverageRepository.getAllApprovedBeverages(_beverages);
     }
 
     public LiveData<SelectedFragment> getSelectedFragment() {

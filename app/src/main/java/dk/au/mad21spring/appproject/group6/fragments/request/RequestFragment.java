@@ -84,7 +84,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         addBeverageBtn = view.findViewById(R.id.requestAddBeverageBtn);
         addBeverageBtn.setOnClickListener(v -> addNewBeverageRequest() );
 
-        vm.GetRequests().observe(getViewLifecycleOwner(), beverages -> handleOnNewRequestsReceived(beverages) );
+        vm.GetRequests().observe(getViewLifecycleOwner(), this::handleOnNewRequestsReceived);
     }
 
     private void handleOnNewRequestsReceived(List<Beverage> updatedBeverages) {
@@ -105,7 +105,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     private void addNewBeverageRequest() {
         Log.d(TAG, "addNewBeverageRequest: adding new draft");
         String id = vm.CreateNewBeverageRequest();
-        latestAddedRequestId = id;
+        latestAddedRequestId = id; //So that we can select this item, when it becomes available in the list
     }
 
     @Override

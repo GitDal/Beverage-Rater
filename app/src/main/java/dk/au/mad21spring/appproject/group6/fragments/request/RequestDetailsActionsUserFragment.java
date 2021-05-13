@@ -90,6 +90,11 @@ public class RequestDetailsActionsUserFragment extends Fragment {
 
         save();
         Beverage beverageRequest = vm.getRequest().getValue();
+
+        if(!validateBeverageRequest(beverageRequest)) {
+            Toast.makeText(getView().getContext(), "Couldn't send request: Product-name and Company-name is required", Toast.LENGTH_SHORT).show();
+        }
+
         vm.SendRequest(beverageRequest);
     }
 
@@ -97,5 +102,9 @@ public class RequestDetailsActionsUserFragment extends Fragment {
         Toast.makeText(getContext(), "Deleting request!", Toast.LENGTH_SHORT).show();
 
         vm.DeleteRequest();
+    }
+
+    private boolean validateBeverageRequest(Beverage beverage) {
+        return !beverage.Name.isEmpty() && !beverage.CompanyName.isEmpty();
     }
 }

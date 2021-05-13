@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import dk.au.mad21spring.appproject.group6.BeverageRepository;
+import dk.au.mad21spring.appproject.group6.constants.GoogleSearchApi;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.RequestStatus;
 
@@ -41,7 +42,7 @@ public class RequestViewModel extends AndroidViewModel {
     }
 
     public String CreateNewBeverageRequest() {
-        String defaultImageUrl = "https://s3-eu-west-2.amazonaws.com/newzimlive/wp-content/uploads/2019/01/09152727/Fizzy-Drinks.jpg";
+        String defaultImageUrl = GoogleSearchApi.dummyImgUrl;
         Beverage beverageRequest = new Beverage("untitled product", "", "", defaultImageUrl, RequestStatus.DRAFT.getId(), beverageRepository.currentUser.Email);
 
         beverageRepository.addBeverage(beverageRequest);

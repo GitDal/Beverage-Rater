@@ -30,6 +30,7 @@ public class RequestDetailsActionsUserViewModel extends RequestDetailsBaseViewMo
         }
         beverageRequest.Status = RequestStatus.PENDING;
         beverageRepository.updateBeverage(beverageRequest);
+        beverageRepository.updateImageUrlForProduct(beverageRequest, beverageRequest.Name);
     }
 
     public void DeleteRequest() {

@@ -45,7 +45,7 @@ public class RequestViewModel extends AndroidViewModel {
         return beverageRequests;
     }
 
-    public String CreateNewBeverageRequest() {
+    public String CreateNewBeverageRequest(String eanNumber) {
         String defaultImageUrl = GoogleSearchApi.dummyImgUrl;
         Beverage beverageRequest =
                 new Beverage("",
@@ -54,6 +54,10 @@ public class RequestViewModel extends AndroidViewModel {
                         defaultImageUrl,
                         RequestStatus.DRAFT.getId(),
                         beverageRepository.currentUser.Email);
+
+        if(!eanNumber.isEmpty()) {
+            beverageRequest.EanNumbers.add(eanNumber);
+        }
 
         beverageRepository.addBeverage(beverageRequest);
         return beverageRequest.Id;

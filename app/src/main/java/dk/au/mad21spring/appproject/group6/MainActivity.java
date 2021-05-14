@@ -24,6 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
+import dk.au.mad21spring.appproject.group6.fragments.ProfileFragment;
 import dk.au.mad21spring.appproject.group6.fragments.wrapper.WrapperFragment;
 import dk.au.mad21spring.appproject.group6.fragments.request.RequestFragment;
 import dk.au.mad21spring.appproject.group6.viewmodels.MainActivityViewModel;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     //Fragment
     private WrapperFragment wrapperFragment;
     private RequestFragment requestFragment;
+    private ProfileFragment profileFragment;
 
     //State
     MainActivityViewModel vm;
@@ -72,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: Received savedInstanceState: tabPosition = " + tabPosition);
             mainTabs.selectTab(mainTabs.getTabAt(tabPosition));
         }
-
         handleTabPosition(mainTabs.getSelectedTabPosition());
     }
 
@@ -91,6 +92,20 @@ public class MainActivity extends AppCompatActivity {
         if (requestFragment == null) {
             requestFragment = RequestFragment.newInstance();
         }
+
+        profileFragment = (ProfileFragment) getSupportFragmentManager().findFragmentByTag(PROFILE_FRAG);
+        if (profileFragment == null) {
+            profileFragment = ProfileFragment.newInstance();
+        }
+    }
+
+    private void reInitializeFragments() {
+        wrapperFragment = WrapperFragment.newInstance();
+        requestFragment = RequestFragment.newInstance();
+        profileFragment = ProfileFragment.newInstance();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainFragmentContainter, wrapperFragment, WRAPPER_FRAG)
+                .commit();
     }
 
     private void setupUI() {
@@ -129,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
                 break;
             case 2:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragmentContainter, profileFragment, PROFILE_FRAG)
+                        .commit();
                 break;
             default:
                 Log.d(TAG, "Unhandled switch case");
@@ -172,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
@@ -192,8 +209,8 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if(auth.getCurrentUser() != null){
                     invalidateOptionsMenu();                        //To update action-bar with new username (onPrepareOptionsMenu gets called again)
+                    reInitializeFragments();
                     mainTabs.selectTab(mainTabs.getTabAt(0)); // Update tab to display default tab
-                    handleTabPosition(0);
                     vm.UpdateCurrentUser();
                     return;
                 }

@@ -67,6 +67,10 @@ public class DetailsFragment extends Fragment {
         vm.setBeverage(beverage);
     }
 
+    public Beverage getBeverage() {
+        return vm.getBeverage().getValue();
+    }
+
     private void updateUi(Beverage beverage) {
         name.setText(beverage.Name);
         company.setText(beverage.CompanyName);

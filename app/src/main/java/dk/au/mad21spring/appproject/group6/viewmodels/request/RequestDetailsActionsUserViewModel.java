@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import dk.au.mad21spring.appproject.group6.models.ActionResult;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.RequestStatus;
 
@@ -16,26 +17,45 @@ public class RequestDetailsActionsUserViewModel extends RequestDetailsBaseViewMo
         super(application);
     }
 
-    // TODO: Remember to update beverageRequest in vm (or make logic so that its always the newest we retrieve)
-    public void SaveRequest(Beverage beverageRequest) {
+    public ActionResult saveRequest(Beverage beverageRequest) {
         if(beverageRequest.Status != RequestStatus.DRAFT) {
-            return;
+            return ActionResult.Error("Request couldn't be sent", "Request has to be draft");
+        }
+        if(!validateBeverageRequest(beverageRequest)) {
+            return ActionResult.Error("Request couldn't be sent", "Required fields missing");
         }
         beverageRepository.updateBeverage(beverageRequest);
+        return ActionResult.Success("Request was saved!");
     }
 
-    public void SendRequest(Beverage beverageRequest) {
+    public ActionResult sendRequest(Beverage beverageRequest) {
         if(beverageRequest.Status != RequestStatus.DRAFT) {
-            return;
+            return ActionResult.Error("Request couldn't be sent", "Request has to be draft");
         }
+        if(!validateBeverageRequest(beverageRequest)) {
+            return ActionResult.Error("Request couldn't be sent", "Required fields missing");
+        }
+
         beverageRequest.Status = RequestStatus.PENDING;
         beverageRepository.updateBeverage(beverageRequest);
+        beverageRepository.updateImageUrlForProduct(beverageRequest, beverageRequest.Name);
+        return ActionResult.Success("Request was sent!");
     }
 
-    public void DeleteRequest() {
-        String beverageId = beverageRequest.getValue().Id;
+    public ActionResult deleteRequest() {
+        Beverage currentBeverageRequest = beverageRequest.getValue();
 
+        if(currentBeverageRequest.Status != RequestStatus.DRAFT) {
+            return ActionResult.Error("Request couldn't be deleted", "Request has to be draft");
+        }
+
+        String beverageId = currentBeverageRequest.Id;
         Log.d(TAG, "DeleteRequest: deleting request with id = " + beverageId);
         beverageRepository.deleteBeverage(beverageId);
+        return ActionResult.Success("Request was deleted!");
+    }
+
+    private boolean validateBeverageRequest(Beverage beverage) {
+        return !beverage.Name.isEmpty() && !beverage.CompanyName.isEmpty();
     }
 }

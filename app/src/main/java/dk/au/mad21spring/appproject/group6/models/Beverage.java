@@ -34,4 +34,9 @@ public class Beverage {
         Status = RequestStatus.fromId(statusCode);
         RequestedByUserId = requestedByUserId;
     }
+
+    @Override
+    public String toString() {
+        return "Beverage{" + "Id='" + Id + '\'' + ", Name='" + Name + '\'' + '}';
+    }
 }

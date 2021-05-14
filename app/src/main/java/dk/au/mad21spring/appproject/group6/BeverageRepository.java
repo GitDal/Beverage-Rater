@@ -4,30 +4,41 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+import dk.au.mad21spring.appproject.group6.constants.GoogleSearchApi;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.CurrentUser;
 import dk.au.mad21spring.appproject.group6.models.RequestStatus;
+import dk.au.mad21spring.appproject.group6.models.api.GoogleSearchResponse;
+import dk.au.mad21spring.appproject.group6.models.api.Image;
+import dk.au.mad21spring.appproject.group6.models.api.Item;
 
 public class BeverageRepository {
 
     private static final String TAG = "BeverageRepository";
     private static BeverageRepository instance;
-    DatabaseReference beverageDb;
-    private static String dummyImgUrl = "https://s3-eu-west-2.amazonaws.com/newzimlive/wp-content/uploads/2019/01/09152727/Fizzy-Drinks.jpg";
+    private DatabaseReference beverageDb;
+    private RequestQueue queue;
 
     public static BeverageRepository getBeverageRepository(final Context context) {
         if(instance == null) {
@@ -41,6 +52,7 @@ public class BeverageRepository {
     public CurrentUser currentUser;
 
     private BeverageRepository(Context context) {
+        queue = Volley.newRequestQueue(context.getApplicationContext());
         beverageDb = FirebaseDatabase.getInstance().getReference("beverages");
     }
 
@@ -175,6 +187,7 @@ public class BeverageRepository {
     /* Mutations */
 
     public void addBeverage(Beverage beverage){
+
         beverageDb.child(beverage.Id).setValue(beverage);
     }
 
@@ -182,5 +195,48 @@ public class BeverageRepository {
 
     public void deleteBeverage(String beverageId) {
         beverageDb.child(beverageId).removeValue();
+    }
+
+    /* API */
+
+    public void updateImageUrlForProduct(Beverage beverage, String productName) {
+        String requestUrl = GoogleSearchApi.BaseUrl + "key=" + GoogleSearchApi.ApiKey + "&cx=" + GoogleSearchApi.ImagesGoogleEngineId + "&searchType=image" + "&q=" + productName;
+        //example: "key=INSERT_YOUR_API_KEY&cx=017576662512468239146:omuauf_lfve&q=lectures"
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl,
+                response -> {
+                    if(!response.isEmpty()) {
+
+                        Log.d(TAG, "getImageUrlForProduct: Got Response:");
+                        Gson gson = new GsonBuilder().create();
+                        GoogleSearchResponse imageResponse = gson.fromJson(response, GoogleSearchResponse.class);
+
+                        ListIterator<Item> li = imageResponse.getItems().listIterator();
+
+                        while(li.hasNext()) {
+                            Item imageItem = li.next();
+                            Image image =  imageItem.getImage();
+
+                            if(image != null) {
+                                String thumbnailUrl = image.getThumbnailLink();
+
+                                if(!thumbnailUrl.isEmpty()) {
+                                    Log.d(TAG, "getImageUrlForProduct: New image-url found for beverage: " + beverage.toString());
+                                    beverage.ImageUrl = thumbnailUrl;
+                                    updateBeverage(beverage);
+                                    return;
+                                }
+                            }
+                        }
+
+                    } else {
+                        Log.d(TAG, "getImageUrlForProduct: Response was empty");
+                    }
+                }, error -> {
+            Log.d(TAG, "getImageUrlForProduct: An error occurred while fetching data: " +  error.toString());
+        });
+
+        //Add request to Volley-queue
+        queue.add(stringRequest);
     }
 }

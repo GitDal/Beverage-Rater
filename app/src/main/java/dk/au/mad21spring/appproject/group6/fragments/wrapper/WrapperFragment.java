@@ -89,7 +89,7 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
             @Override
             public void onChanged(Integer index) {
                 List<Beverage> beverages = listFragment.getAdapterList();
-                if(beverages != null){
+                if (beverages != null) {
                     detailsFragment.setBeverage(beverages.get(index));
                 }
             }
@@ -114,8 +114,13 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
         }
 
         List<Beverage> queriedBeverages = new ArrayList<Beverage>();
+        Beverage detailsBeverage = detailsFragment.getBeverage();
 
         for(Beverage beverage : beverages){
+            if(detailsBeverage != null && detailsBeverage.Id == beverage.Id){
+                detailsFragment.setBeverage(beverage);
+            }
+
             if(beverage.Name.toLowerCase().contains(query.toLowerCase()) || beverage.CompanyName.toLowerCase().contains(query.toLowerCase())){
                 queriedBeverages.add(beverage);
                 continue;

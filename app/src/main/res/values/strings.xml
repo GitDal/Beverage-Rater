@@ -21,4 +21,10 @@
     <string name="detailsName">Name :</string>
     <string name="detailsCompany">Company :</string>
     <string name="detailsDescription">Description :</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
+    <string name="profile_userName">Username:</string>
+    <string name="profile_email">Email:</string>
+    <string name="profile_ratings_given">Ratings given:</string>
+    <string name="profile_beverages_approved">Beverages approved:</string>
 </resources>

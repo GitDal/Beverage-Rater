@@ -9,6 +9,17 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <ImageView
+        android:id="@+id/requestScanBeverageBtnImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/add_beverage_barcode_scanner_img_description"
+        android:src="@drawable/ic_barcode_scanner"
+        app:layout_constraintBottom_toBottomOf="@+id/requestAddBeverageBtn"
+        app:layout_constraintStart_toEndOf="@+id/requestAddBeverageBtn"
+        app:layout_constraintTop_toTopOf="@+id/requestAddBeverageBtn" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/requestRcv"
         android:layout_width="0dp"

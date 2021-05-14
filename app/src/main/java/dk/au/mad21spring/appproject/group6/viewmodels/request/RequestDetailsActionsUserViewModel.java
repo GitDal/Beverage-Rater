@@ -45,8 +45,8 @@ public class RequestDetailsActionsUserViewModel extends RequestDetailsBaseViewMo
     public ActionResult deleteRequest() {
         Beverage currentBeverageRequest = beverageRequest.getValue();
 
-        if(currentBeverageRequest.Status != RequestStatus.DRAFT) {
-            return ActionResult.Error("Request couldn't be deleted", "Request has to be draft");
+        if(currentBeverageRequest.Status != RequestStatus.DRAFT && currentBeverageRequest.Status != RequestStatus.DECLINED) {
+            return ActionResult.Error("Request couldn't be deleted", "Request has to be draft or declined");
         }
 
         String beverageId = currentBeverageRequest.Id;

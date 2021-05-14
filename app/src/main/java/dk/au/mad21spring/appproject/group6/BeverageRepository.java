@@ -211,7 +211,13 @@ public class BeverageRepository {
                         Gson gson = new GsonBuilder().create();
                         GoogleSearchResponse imageResponse = gson.fromJson(response, GoogleSearchResponse.class);
 
-                        ListIterator<Item> li = imageResponse.getItems().listIterator();
+                        List<Item> results = imageResponse.getItems();
+                        if(results == null) {
+                            Log.d(TAG, "updateImageUrlForProduct: No image-results found for beverage: " + (beverage != null ? beverage.toString() : productName));
+                            return;
+                        }
+
+                        ListIterator<Item> li = results.listIterator();
 
                         while(li.hasNext()) {
                             Item imageItem = li.next();

@@ -145,9 +145,7 @@ public class RequestDetailsFragment extends Fragment {
 
     private void changeUIAccordingToStatusAndRole(View view, RequestStatus status) {
 
-        boolean isDraft = (status == RequestStatus.DRAFT);
-
-        if(isDraft) {
+        if(status == RequestStatus.DRAFT) {
             //DRAFT --> user can edit and save/send
             EditTextExtensions.Enable(txtBeverageName, view.getContext());
             EditTextExtensions.Enable(txtBeverageCompanyName, view.getContext());
@@ -160,22 +158,15 @@ public class RequestDetailsFragment extends Fragment {
             EditTextExtensions.Disable(txtBeverageInfo, view.getContext());
         }
 
-        updateActionButtons(isDraft);
+        updateActionButtons(status);
     }
 
-    private void updateActionButtons(boolean isDraft) {
+    private void updateActionButtons(RequestStatus status) {
         if(vm.IsCurrentUserAdmin()) {
             // Good to go! (Show approve/decline)
-        } else if(isDraft) {
-            // show save/send
-            getChildFragmentManager().beginTransaction()
-                    .show(requestDetailsActionsUserFragment)
-                    .commit();
-        } else {
-            // show nothing
-            getChildFragmentManager().beginTransaction()
-                    .hide(requestDetailsActionsUserFragment)
-                    .commit();
+        } else  {
+            // show buttons
+            requestDetailsActionsUserFragment.updateActionButtons(status);
         }
     }
 

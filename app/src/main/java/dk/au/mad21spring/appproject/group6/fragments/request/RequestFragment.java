@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,13 +33,13 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     private RequestDetailsFragment requestDetailsFragment;
 
     //State
-    RequestViewModel vm;
-    String latestAddedRequestId = null;
+    private RequestViewModel vm;
+    private String latestAddedRequestId = null;
 
     //UI
-    RecyclerView rcvList;
-    BeverageRequestAdapter adapter;
-    Button addBeverageBtn;
+    private RecyclerView rcvList;
+    private BeverageRequestAdapter adapter;
+    private Button addBeverageBtn;
 
     public RequestFragment() {
         // Required empty public constructor
@@ -76,14 +75,19 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        setupUI(view);
+        vm.GetRequests().observe(getViewLifecycleOwner(), this::handleOnNewRequestsReceived);
+    }
+
+    private void setupUI(View view) {
         rcvList = view.findViewById(R.id.requestRcv);
         rcvList.setAdapter(adapter);
         rcvList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         addBeverageBtn = view.findViewById(R.id.requestAddBeverageBtn);
         addBeverageBtn.setOnClickListener(v -> addNewBeverageRequest() );
-
-        vm.GetRequests().observe(getViewLifecycleOwner(), this::handleOnNewRequestsReceived);
+        addBeverageBtn.setVisibility(vm.currentUserIsAdmin() ? View.GONE : View.VISIBLE);
     }
 
     private void handleOnNewRequestsReceived(List<Beverage> updatedBeverages) {
@@ -98,6 +102,9 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
 
         if(adapter.getSelectedBeverage() != null) {
             initializeFragment(adapter.getSelectedBeverage().Id);
+        } else if(requestDetailsFragment != null) {
+            Log.d(TAG, "handleOnNewRequestsReceived: The request in detailsFragment was deleted - hiding fragment");
+            hideFragment();
         }
     }
 
@@ -131,6 +138,9 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
             initializeFragment(bRequest.Id);
         } else {
             requestDetailsFragment.updateShownRequest(bRequest.Id);
+            if(requestDetailsFragment.isHidden()) {
+                showFragment();
+            }
         }
     }
 
@@ -139,17 +149,36 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         if(requestDetailsFragment == null){
             Log.d(TAG, "initializeFragment: initializing requestDetailsFragment (requestId = " + requestId + ")");
             requestDetailsFragment = RequestDetailsFragment.newInstance(requestId);
-            showFragment();
+            insertFragment();
         } else if(requestDetailsFragment.getCurrentRequestId() != requestId) {
             Log.d(TAG, "initializeFragment: updating requestDetailsFragment (requestId = " + requestId + ")");
             requestDetailsFragment.updateShownRequest(requestId);
+            if(requestDetailsFragment.isHidden()) {
+                showFragment();
+            }
+        }
+    }
+
+    private void insertFragment() {
+        if(requestDetailsFragment != null) {
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.requestDetailsContainer, requestDetailsFragment, DETAILS_FRAG)
+                    .commit();
         }
     }
 
     private void showFragment() {
         if(requestDetailsFragment != null) {
             getChildFragmentManager().beginTransaction()
-                    .replace(R.id.requestDetailsContainer, requestDetailsFragment, DETAILS_FRAG)
+                    .show(requestDetailsFragment)
+                    .commit();
+        }
+    }
+
+    private void hideFragment() {
+        if(requestDetailsFragment != null) {
+            getChildFragmentManager().beginTransaction()
+                    .hide(requestDetailsFragment)
                     .commit();
         }
     }

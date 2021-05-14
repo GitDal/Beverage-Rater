@@ -25,6 +25,10 @@ public class RequestViewModel extends AndroidViewModel {
         beverageRequests = new MutableLiveData<>();
     }
 
+    public boolean currentUserIsAdmin() {
+        return beverageRepository.currentUser != null && beverageRepository.currentUser.IsAdmin;
+    }
+
     public LiveData<List<Beverage>> GetRequests() {
         if(beverageRepository.currentUser.IsAdmin) {
             beverageRepository.getAllPendingBeverages(beverageRequests);
@@ -43,7 +47,13 @@ public class RequestViewModel extends AndroidViewModel {
 
     public String CreateNewBeverageRequest() {
         String defaultImageUrl = GoogleSearchApi.dummyImgUrl;
-        Beverage beverageRequest = new Beverage("untitled product", "", "", defaultImageUrl, RequestStatus.DRAFT.getId(), beverageRepository.currentUser.Email);
+        Beverage beverageRequest =
+                new Beverage("",
+                        "",
+                        "",
+                        defaultImageUrl,
+                        RequestStatus.DRAFT.getId(),
+                        beverageRepository.currentUser.Email);
 
         beverageRepository.addBeverage(beverageRequest);
         return beverageRequest.Id;

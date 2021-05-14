@@ -95,7 +95,7 @@ public class BeverageRequestAdapter extends RecyclerView.Adapter<BeverageRequest
         }
 
         Beverage currentRequest = beverageRequestList.get(position);
-        holder.txtBeverageName.setText(currentRequest.Name);
+        holder.txtBeverageName.setText(!currentRequest.Name.isEmpty() ? currentRequest.Name : "New request");
         holder.txtBeverageCompanyName.setText(currentRequest.CompanyName);
         Glide.with(holder.imgBeverage.getContext()).load(currentRequest.ImageUrl).into(holder.imgBeverage);
         holder.imgStatusIcon.setImageResource(currentRequest.Status.resolveIconResId());

@@ -137,6 +137,8 @@ public class RequestDetailsFragment extends Fragment {
                 txtBeverageInfo.setText(beverageRequest.BeverageInfo);
 
                 changeUIAccordingToStatusAndRole(view, beverageRequest.Status);
+            } else {
+                Log.d(TAG, "updateContent: The beverageRequest for fragment is null");
             }
         });
     }

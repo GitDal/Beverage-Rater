@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import dk.au.mad21spring.appproject.group6.R;
+import dk.au.mad21spring.appproject.group6.models.ActionResult;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.BeverageRequestDetailsDTO;
 import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestDetailsActionsUserViewModel;
@@ -68,12 +69,11 @@ public class RequestDetailsActionsUserFragment extends Fragment {
         saveBtn = view.findViewById(R.id.requestDetailsActionsUserSaveBtn);
         deleteBtn = view.findViewById(R.id.requestDetailsActionsUserDeleteRequestBtn);
         sendRequestBtn.setOnClickListener(v -> send() );
-        saveBtn.setOnClickListener(v -> save() );
+        saveBtn.setOnClickListener(v -> save(true) );
         deleteBtn.setOnClickListener(v -> delete() );
     }
 
-    private void save() {
-        Toast.makeText(getContext(), "Saving request!", Toast.LENGTH_SHORT).show();
+    private void save(boolean showMessage) {
 
         BeverageRequestDetailsDTO formData = ((RequestDetailsFragment) getParentFragment()).getBeverageFormData();
         Beverage beverageRequest = vm.getRequest().getValue();
@@ -82,29 +82,25 @@ public class RequestDetailsActionsUserFragment extends Fragment {
         beverageRequest.CompanyName = formData.CompanyName;
         beverageRequest.BeverageInfo = formData.BeverageInfo;
 
-        vm.SaveRequest(beverageRequest);
+        ActionResult result = vm.saveRequest(beverageRequest);
+        if(showMessage) {
+            result.ShowToastMessage(getContext());
+        }
     }
 
     private void send() {
-        Toast.makeText(getContext(), "Sending request!", Toast.LENGTH_SHORT).show();
 
-        save();
+        save(false);
         Beverage beverageRequest = vm.getRequest().getValue();
 
-        if(!validateBeverageRequest(beverageRequest)) {
-            Toast.makeText(getView().getContext(), "Couldn't send request: Product-name and Company-name is required", Toast.LENGTH_SHORT).show();
-        }
-
-        vm.SendRequest(beverageRequest);
+        ActionResult result = vm.sendRequest(beverageRequest);
+        result.ShowToastMessage(getContext());
     }
 
     private void delete() {
-        Toast.makeText(getContext(), "Deleting request!", Toast.LENGTH_SHORT).show();
-
-        vm.DeleteRequest();
+        ActionResult result = vm.deleteRequest();
+        result.ShowToastMessage(getContext());
     }
 
-    private boolean validateBeverageRequest(Beverage beverage) {
-        return !beverage.Name.isEmpty() && !beverage.CompanyName.isEmpty();
-    }
+
 }

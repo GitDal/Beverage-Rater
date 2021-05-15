@@ -83,7 +83,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/requestDetailsActionsContainer"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/requestDetailsInfoTxt"

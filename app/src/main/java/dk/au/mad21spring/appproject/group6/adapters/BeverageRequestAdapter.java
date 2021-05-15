@@ -1,5 +1,7 @@
 package dk.au.mad21spring.appproject.group6.adapters;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,12 +29,14 @@ public class BeverageRequestAdapter extends RecyclerView.Adapter<BeverageRequest
     }
 
     private static final String TAG = "BeverageRequestAdapter";
+    private Context context;
     private IBeverageRequestItemClickedListener listener;
     private List<Beverage> beverageRequestList;
     private int selectedPosition;
 
-    public BeverageRequestAdapter(IBeverageRequestItemClickedListener listener, int selectedItemPosition) {
+    public BeverageRequestAdapter(IBeverageRequestItemClickedListener listener, Context context, int selectedItemPosition) {
         this.listener = listener;
+        this.context = context;
         selectedPosition = selectedItemPosition;
     }
 
@@ -97,7 +101,7 @@ public class BeverageRequestAdapter extends RecyclerView.Adapter<BeverageRequest
         }
 
         Beverage currentRequest = beverageRequestList.get(position);
-        holder.txtBeverageName.setText(!currentRequest.Name.isEmpty() ? currentRequest.Name : "New request");
+        holder.txtBeverageName.setText(!currentRequest.Name.isEmpty() ? currentRequest.Name : context.getResources().getString(R.string.default_request_name_new_request));
         holder.txtBeverageCompanyName.setText(currentRequest.CompanyName);
         Glide.with(holder.imgBeverage.getContext()).load(currentRequest.ImageUrl).into(holder.imgBeverage);
         holder.imgStatusIcon.setImageResource(currentRequest.Status.resolveIconResId());

@@ -54,7 +54,7 @@ public class AuthActivity extends AppCompatActivity {
         String password = passwordInput.getText().toString();
 
         if(email.isEmpty() || password.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Please fill out both email and password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.auth_email_password_required), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -66,7 +66,7 @@ public class AuthActivity extends AppCompatActivity {
                     finish();
                 } else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(getApplicationContext(), "Authentication failed with message: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.auth_failed_with_msg) + ": " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -77,7 +77,7 @@ public class AuthActivity extends AppCompatActivity {
         String password = passwordInput.getText().toString();
 
         if(email.isEmpty() || password.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Please fill out both email and password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.auth_email_password_required), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -89,7 +89,7 @@ public class AuthActivity extends AppCompatActivity {
                     finish();
                 } else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(getApplicationContext(), "Authentication failed with message: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.auth_failed_with_msg) + ": " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

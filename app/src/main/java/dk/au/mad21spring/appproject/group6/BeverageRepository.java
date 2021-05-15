@@ -129,7 +129,7 @@ public class BeverageRepository {
                         beverageList.add(beverage);
                     }
                 }
-                beverageList.sort((o1, o2) -> (int) (o2.GlobalRating - o1.GlobalRating));
+                beverageList.sort((o1, o2) -> o2.GlobalRating.compareTo(o1.GlobalRating));
                 beverages.setValue(beverageList);
             }
 

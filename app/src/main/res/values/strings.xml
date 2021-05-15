@@ -34,6 +34,7 @@
     <string name="notification_default_content_title">No new updates…</string>
     <string name="notification_request_resolved_content_text">One of your requests was resolved by a moderator.</string>
     <string name="ean_number">EAN-number</string>
+    <string name="default_request_name_new_request">New request</string>
 
 
     <!--TOAST Messages-->

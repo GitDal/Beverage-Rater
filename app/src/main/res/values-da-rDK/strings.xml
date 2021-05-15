@@ -35,6 +35,7 @@
     <string name="notification_request_resolved_content_text">En af dine anmodninger er blevet håndteret af en moderator.</string>
     <string name="notification_content_title">Drikkevare-anmodning håndteret</string>
     <string name="ean_number">EAN-nummer</string>
+    <string name="default_request_name_new_request">Ny anmodning</string>
 
     <!--TOAST Messages-->
     <string name="auth_email_password_required">Venligst udfyld både email og adgangskode</string>

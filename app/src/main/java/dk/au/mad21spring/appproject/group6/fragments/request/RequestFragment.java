@@ -69,7 +69,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         int selectedPos = (savedInstanceState != null) ?
                 savedInstanceState.getInt(InstanceStateExtras.REQUEST_SELECTED_ITEM_POS, 0) : 0;
 
-        adapter = new BeverageRequestAdapter(this, selectedPos);
+        adapter = new BeverageRequestAdapter(this, getContext(), selectedPos);
 
         // So that the details fragment is shown correctly when editing text.
         Window wind = getActivity().getWindow();

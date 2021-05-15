@@ -39,7 +39,7 @@
 
     <!--TOAST Messages-->
     <string name="auth_email_password_required">Venligst udfyld både email og adgangskode</string>
-    <string name="auth_failed_with_msg">Login fejlede med beskeden: </string>
+    <string name="auth_failed_with_msg">Login fejlede med beskeden</string>
     <string name="new_draft_added">Nyt udkast tilføjet</string>
     <string name="request_was_saved">Anmodning blev gemt!</string>
     <string name="request_was_sent">Anmodning blev sendt!</string>

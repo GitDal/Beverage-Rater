@@ -215,8 +215,8 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
 
     @Override
     public void onStop() {
-        Log.d(TAG, "onStop: Setting SoftInputMode back to default");
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
+        Log.d(TAG, "onStop: Setting SoftInputMode back to default - 16");
+        getActivity().getWindow().setSoftInputMode(16);
         super.onStop();
     }
 }

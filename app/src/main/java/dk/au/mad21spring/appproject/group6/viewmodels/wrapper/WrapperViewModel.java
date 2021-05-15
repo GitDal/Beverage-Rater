@@ -18,12 +18,14 @@ public class WrapperViewModel extends AndroidViewModel {
     MutableLiveData<List<Beverage>> _beverages;
     MutableLiveData<Integer> _selectedBeverageIndex;
     MutableLiveData<String> _query;
+    boolean _hasBeverageBeenSelected;
 
     public WrapperViewModel(@NonNull Application application) {
         super(application);
         _beverageRepository = BeverageRepository.getBeverageRepository(application);
         _selectedFragment = new MutableLiveData<SelectedFragment>(SelectedFragment.LIST);
         _selectedBeverageIndex = new MutableLiveData<Integer>(0);
+        _hasBeverageBeenSelected = false;
         _query = new MutableLiveData<String>("");
         _beverages = new MutableLiveData<List<Beverage>>();
         _beverageRepository.getAllApprovedBeverages(_beverages);
@@ -51,6 +53,11 @@ public class WrapperViewModel extends AndroidViewModel {
 
     public void setSelectedBeverageIndex(Integer index) {
         _selectedBeverageIndex.setValue(index);
+        _hasBeverageBeenSelected = true;
+    }
+
+    public boolean hasBeverageBeenSelected() {
+        return _hasBeverageBeenSelected;
     }
 
     public LiveData<List<Beverage>> getBeverages() {

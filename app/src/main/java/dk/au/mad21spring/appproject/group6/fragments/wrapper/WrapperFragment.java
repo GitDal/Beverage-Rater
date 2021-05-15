@@ -96,7 +96,11 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
             public void onChanged(Integer index) {
                 List<Beverage> beverages = listFragment.getAdapterList();
                 if (beverages != null) {
-                    detailsFragment.setBeverage(beverages.get(index));
+                    if(beverages.size() >= index + 1) {
+                        Beverage beverage = beverages.get(index);
+                        detailsFragment.setBeverage(beverage);
+                    }
+
                 }
             }
         });
@@ -174,7 +178,8 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
         if (orientation == Orientation.LANDSCAPE) {
             // To make sure both containers are visible
             listFragmentContainer.setVisibility(View.VISIBLE);
-            detailsFragmentContainer.setVisibility(View.VISIBLE);
+            detailsFragmentContainer.setVisibility(vm.hasBeverageBeenSelected() ? View.VISIBLE : View.GONE);
+
             return;
         }
 

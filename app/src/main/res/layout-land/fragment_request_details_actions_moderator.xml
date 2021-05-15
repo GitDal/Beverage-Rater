@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/requestDetailsActionsModeratorConstraintLayout"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     tools:context=".fragments.request.RequestDetailsActionsModeratorFragment">
 
@@ -20,8 +20,9 @@
         android:id="@+id/requestDetailsActionsModeratorDeclineBtn"
         android:layout_width="136dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="@string/decline"
         app:icon="@drawable/ic_cross_circle_filled"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/requestDetailsActionsModeratorApproveBtn"
+        app:layout_constraintTop_toTopOf="@+id/requestDetailsActionsModeratorApproveBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

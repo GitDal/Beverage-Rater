@@ -9,6 +9,9 @@
     <string name="appbar_action_signOut">Log ud</string>
     <string name="company_label">Producent:</string>
     <string name="info_label">Info:</string>
+    <string name="product_name_hint">produkt navn</string>
+    <string name="company_name_hint">producent navn</string>
+    <string name="beverage_info_hint">info vedr. drikkevaren…</string>
     <string name="send_request">Send</string>
     <string name="save">Gem</string>
     <string name="approve">Godkend</string>
@@ -28,7 +31,22 @@
     <string name="detailsUpdateRating">Opdater bedømmelse</string>
     <string name="updateRatingText">opdateret bedømmelse til</string>
     <string name="beverage_detail_rating_text">Bedøm drikkevare:</string>
-    <string name="notification_default_content_title">Ingen nye opdateringer...</string>
+    <string name="notification_default_content_title">Ingen nye opdateringer…</string>
     <string name="notification_request_resolved_content_text">En af dine anmodninger er blevet håndteret af en moderator.</string>
-    <string name="notification_content_title">Drikkevarer-anmodning håndteret</string>
+    <string name="notification_content_title">Drikkevare-anmodning håndteret</string>
+    <string name="ean_number">EAN-nummer</string>
+
+    <!--TOAST Messages-->
+    <string name="auth_email_password_required">Venligst udfyld både email og adgangskode</string>
+    <string name="auth_failed_with_msg">Login fejlede med beskeden: </string>
+    <string name="new_draft_added">Nyt udkast tilføjet</string>
+    <string name="request_was_saved">Anmodning blev gemt!</string>
+    <string name="request_was_sent">Anmodning blev sendt!</string>
+    <string name="request_was_deleted">Anmodning blev slettet!</string>
+    <string name="request_couldnt_be_saved">Anmodning kunne ikke gemmes</string>
+    <string name="request_couldnt_be_sent">Anmodning kunne ikke sendes</string>
+    <string name="request_couldnt_be_deleted">Anmodning kunne ikke slettes</string>
+    <string name="request_error_has_to_be_draft">Anmodning skal være et udkast</string>
+    <string name="request_error_has_to_be_draft_or_declined">Anmodning skal være et udkast eller afvist</string>
+    <string name="request_error_fields_missing">Krævede input-felter mangler</string>
 </resources>

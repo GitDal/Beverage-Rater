@@ -8,6 +8,9 @@
     <string name="appbar_action_signOut">Sign out</string>
     <string name="company_label">Company:</string>
     <string name="info_label">Info:</string>
+    <string name="product_name_hint">product name</string>
+    <string name="company_name_hint">company name</string>
+    <string name="beverage_info_hint">info about the beverage…</string>
     <string name="send_request">Send</string>
     <string name="save">Save</string>
     <string name="approve">Approve</string>
@@ -30,4 +33,23 @@
     <string name="notification_content_title">Beverage-request resolved</string>
     <string name="notification_default_content_title">No new updates…</string>
     <string name="notification_request_resolved_content_text">One of your requests was resolved by a moderator.</string>
+    <string name="ean_number">EAN-number</string>
+
+
+    <!--TOAST Messages-->
+    <string name="auth_email_password_required">Please fill out both email and password</string>
+    <string name="auth_failed_with_msg">Authentication failed with message</string>
+    <string name="new_draft_added">New draft added</string>
+    <string name="request_was_saved">Request was saved!</string>
+    <string name="request_was_sent">Request was sent!</string>
+    <string name="request_was_deleted">Request was deleted!</string>
+    <string name="request_couldnt_be_saved">Request couldn\'t be saved</string>
+    <string name="request_couldnt_be_sent">Request couldn\'t be sent</string>
+    <string name="request_couldnt_be_deleted">Request couldn\'t be deleted</string>
+    <string name="request_error_has_to_be_draft">Request has to be a draft</string>
+    <string name="request_error_has_to_be_draft_or_declined">Request has to be draft or declined</string>
+    <string name="request_error_fields_missing">Required fields missing</string>
+
+
+
 </resources>

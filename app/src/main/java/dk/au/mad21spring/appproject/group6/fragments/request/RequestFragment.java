@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -71,7 +72,8 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         adapter = new BeverageRequestAdapter(this, selectedPos);
 
         // So that the details fragment is shown correctly when editing text.
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        Window wind = getActivity().getWindow();
+        wind.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     @Override
@@ -140,7 +142,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         Log.d(TAG, "onAddNewBeverageRequestClicked: adding new draft");
         String id = vm.CreateNewBeverageRequest("");
         latestAddedRequestId = id; //So that we can select this item, when it becomes available in the list
-        Toast.makeText(getContext(), "New draft added", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getResources().getString(R.string.new_draft_added), Toast.LENGTH_SHORT).show();
     }
 
     private void onScannerClicked() {
@@ -152,7 +154,12 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         Log.d(TAG, "onScannerResult: adding new draft");
         String id = vm.CreateNewBeverageRequest(eanNumber);
         latestAddedRequestId = id; //So that we can select this item, when it becomes available in the list
-        Toast.makeText(getContext(), "New draft added (EAN-number \'" + eanNumber + "\')", Toast.LENGTH_SHORT).show();
+
+        String message =
+                getResources().getString(R.string.new_draft_added) +
+                "(" + getResources().getString(R.string.ean_number) + ": " + eanNumber + ")";
+
+        Toast.makeText(getContext(),  message, Toast.LENGTH_SHORT).show();
     }
 
     private void initializeFragment(String requestId) {
@@ -216,7 +223,8 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
     @Override
     public void onStop() {
         Log.d(TAG, "onStop: Setting SoftInputMode back to default");
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
+        Window wind = getActivity().getWindow();
+        wind.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
         super.onStop();
     }
 }

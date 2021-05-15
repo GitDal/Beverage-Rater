@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.ActionResult;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.BeverageRequestDetailsDTO;
+import dk.au.mad21spring.appproject.group6.models.RequestStatus;
 import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestDetailsActionsUserViewModel;
 
 public class RequestDetailsActionsUserFragment extends Fragment {
 
+    private static final String TAG = "DetailsActionsUserFrag";
     private static final String REQUEST_ID = "request_id";
 
     RequestDetailsActionsUserViewModel vm;
@@ -64,13 +67,46 @@ public class RequestDetailsActionsUserFragment extends Fragment {
         setupUI(getView());
     }
 
+    public void updateActionButtons(RequestStatus status) {
+        Log.d(TAG, "updateActionButtons: beverage has status:" + status.toString());
+        switch (status) {
+            case DRAFT:
+                saveBtn.setVisibility(View.VISIBLE);
+                sendRequestBtn.setVisibility(View.VISIBLE);
+                deleteBtn.setVisibility(View.VISIBLE);
+                break;
+            case DECLINED:
+                saveBtn.setVisibility(View.GONE);
+                sendRequestBtn.setVisibility(View.GONE);
+                deleteBtn.setVisibility(View.VISIBLE);
+                break;
+            default:
+                hideAllActionButtons();
+                break;
+        }
+    }
+
     private void setupUI(View view) {
         sendRequestBtn = view.findViewById(R.id.requestDetailsActionsUserSendRequestBtn);
         saveBtn = view.findViewById(R.id.requestDetailsActionsUserSaveBtn);
         deleteBtn = view.findViewById(R.id.requestDetailsActionsUserDeleteRequestBtn);
+        initializeButtonEvents();
+
+        Log.d(TAG, "setupUI: hiding all action-buttons");
+        hideAllActionButtons();
+    }
+
+    private void initializeButtonEvents() {
+        Log.d(TAG, "initializeButtonEvents: ");
         sendRequestBtn.setOnClickListener(v -> send() );
         saveBtn.setOnClickListener(v -> save(true) );
         deleteBtn.setOnClickListener(v -> delete() );
+    }
+
+    private void hideAllActionButtons() {
+        saveBtn.setVisibility(View.GONE);
+        sendRequestBtn.setVisibility(View.GONE);
+        deleteBtn.setVisibility(View.GONE);
     }
 
     private void save(boolean showMessage) {
@@ -84,7 +120,7 @@ public class RequestDetailsActionsUserFragment extends Fragment {
 
         ActionResult result = vm.saveRequest(beverageRequest);
         if(showMessage) {
-            result.ShowToastMessage(getContext());
+            result.ShowToastMessage(getView().getContext());
         }
     }
 
@@ -94,12 +130,12 @@ public class RequestDetailsActionsUserFragment extends Fragment {
         Beverage beverageRequest = vm.getRequest().getValue();
 
         ActionResult result = vm.sendRequest(beverageRequest);
-        result.ShowToastMessage(getContext());
+        result.ShowToastMessage(getView().getContext());
     }
 
     private void delete() {
         ActionResult result = vm.deleteRequest();
-        result.ShowToastMessage(getContext());
+        result.ShowToastMessage(getView().getContext());
     }
 
 

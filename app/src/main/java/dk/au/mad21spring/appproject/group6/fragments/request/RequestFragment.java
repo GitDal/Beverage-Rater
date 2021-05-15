@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageRequestAdapter;
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
+import dk.au.mad21spring.appproject.group6.models.ActionResult;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestViewModel;
 
@@ -139,6 +141,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         Log.d(TAG, "onAddNewBeverageRequestClicked: adding new draft");
         String id = vm.CreateNewBeverageRequest("");
         latestAddedRequestId = id; //So that we can select this item, when it becomes available in the list
+        Toast.makeText(getContext(), "New draft added", Toast.LENGTH_SHORT).show();
     }
 
     private void onScannerClicked() {
@@ -150,6 +153,7 @@ public class RequestFragment extends Fragment implements BeverageRequestAdapter.
         Log.d(TAG, "onScannerResult: adding new draft");
         String id = vm.CreateNewBeverageRequest(eanNumber);
         latestAddedRequestId = id; //So that we can select this item, when it becomes available in the list
+        Toast.makeText(getContext(), "New draft added (EAN-number \'" + eanNumber + "\')", Toast.LENGTH_SHORT).show();
     }
 
     private void initializeFragment(String requestId) {

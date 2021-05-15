@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import dk.au.mad21spring.appproject.group6.EditTextExtensions;
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.BeverageRequestDetailsDTO;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.models.db.RequestStatus;
 import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestDetailsViewModel;
 
@@ -77,7 +78,7 @@ public class RequestDetailsFragment extends Fragment {
 
         initializeFragments();
         setupUI(view);
-        updateContent(view);
+        vm.getRequest().observe(getViewLifecycleOwner(), beverageRequest -> updateContent(view, beverageRequest));
     }
 
     private void initializeFragments() {
@@ -116,7 +117,7 @@ public class RequestDetailsFragment extends Fragment {
             requestDetailsActionsUserFragment.vm.setRequestWithId(requestId);
         }
 
-        updateContent(getView());
+        //updateContent(getView());
     }
 
     private void setupUI(View view) {
@@ -126,20 +127,18 @@ public class RequestDetailsFragment extends Fragment {
         txtBeverageInfo = view.findViewById(R.id.requestDetailsInfoTxt);
     }
 
-    private void updateContent(View view) {
-        vm.getRequest().observe(getViewLifecycleOwner(), beverageRequest -> {
-            if(beverageRequest != null) {
-                Log.d(TAG, "updateContent: Updating content");
-                txtBeverageName.setText(beverageRequest.Name);
-                txtBeverageCompanyName.setText(beverageRequest.CompanyName);
-                Glide.with(imgBeverage.getContext()).load(beverageRequest.ImageUrl).into(imgBeverage);
-                txtBeverageInfo.setText(beverageRequest.BeverageInfo);
+    private void updateContent(View view, Beverage beverageRequest) {
+        if(beverageRequest != null) {
+            Log.d(TAG, "updateContent: Updating content");
+            txtBeverageName.setText(beverageRequest.Name);
+            txtBeverageCompanyName.setText(beverageRequest.CompanyName);
+            Glide.with(imgBeverage.getContext()).load(beverageRequest.ImageUrl).into(imgBeverage);
+            txtBeverageInfo.setText(beverageRequest.BeverageInfo);
 
-                changeUIAccordingToStatusAndRole(view, beverageRequest.Status);
-            } else {
-                Log.d(TAG, "updateContent: The beverageRequest for fragment is null");
-            }
-        });
+            changeUIAccordingToStatusAndRole(view, beverageRequest.Status);
+        } else {
+            Log.d(TAG, "updateContent: The beverageRequest for fragment is null");
+        }
     }
 
     private void changeUIAccordingToStatusAndRole(View view, RequestStatus status) {

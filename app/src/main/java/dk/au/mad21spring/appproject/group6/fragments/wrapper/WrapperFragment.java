@@ -152,6 +152,7 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
         if (detailsFragment == null) {
             detailsFragment = DetailsFragment.newInstance();
         }
+        detailsFragment.setHandler(this);
     }
 
     public void onBeverageSelected(int position) {
@@ -163,7 +164,7 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
         vm.setQuery(query);
     }
 
-    private void switchFragment(WrapperViewModel.SelectedFragment fragmentSelection) {
+    public void switchFragment(WrapperViewModel.SelectedFragment fragmentSelection) {
         if (orientation == Orientation.LANDSCAPE) {
             // To make sure both containers are visible
             listFragmentContainer.setVisibility(View.VISIBLE);

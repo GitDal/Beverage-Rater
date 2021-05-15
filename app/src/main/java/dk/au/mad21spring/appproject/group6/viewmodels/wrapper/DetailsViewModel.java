@@ -7,15 +7,23 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import dk.au.mad21spring.appproject.group6.BeverageRepository;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.CurrentUser;
 
 public class DetailsViewModel extends AndroidViewModel {
 
+    BeverageRepository _beverageRepository;
     MutableLiveData<Beverage> _beverage;
+    MutableLiveData<String> _beverageId;
+    MutableLiveData<Boolean> _updateUserRatingBar;
 
     public DetailsViewModel(@NonNull Application application) {
         super(application);
+        _beverageRepository = BeverageRepository.getBeverageRepository(application);
         _beverage = new MutableLiveData<Beverage>();
+        _beverageId = new MutableLiveData<String>();
+        _updateUserRatingBar = new MutableLiveData<Boolean>();
     }
 
     public LiveData<Beverage> getBeverage() {
@@ -25,4 +33,25 @@ public class DetailsViewModel extends AndroidViewModel {
     public void setBeverage(Beverage beverage) {
         _beverage.setValue(beverage);
     }
+
+    public String getBeverageId() {
+        return _beverageId.getValue();
+    }
+
+    public void setBeverageId(String newId) {
+        _beverageId.setValue(newId);
+    }
+
+    public Boolean getUpdateUserRatingBar() {
+        return _updateUserRatingBar.getValue();
+    }
+
+    public void setUpdateUserRatingBar(Boolean update) {
+        _updateUserRatingBar.setValue(update);
+    }
+
+    public CurrentUser getCurrentUser(){
+        return _beverageRepository.currentUser;
+    }
+
 }

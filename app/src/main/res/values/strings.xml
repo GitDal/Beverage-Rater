@@ -27,4 +27,6 @@
     <string name="profile_email">Email:</string>
     <string name="profile_ratings_given">Ratings given:</string>
     <string name="profile_beverages_approved">Beverages approved:</string>
+    <string name="detailsBack">Back</string>
+    <string name="detailsUpdateRating">Update Rating</string>
 </resources>

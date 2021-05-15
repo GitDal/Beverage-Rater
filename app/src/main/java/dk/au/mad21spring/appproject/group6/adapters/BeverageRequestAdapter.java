@@ -18,6 +18,7 @@ import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.color.MaterialColors;
 
 public class BeverageRequestAdapter extends RecyclerView.Adapter<BeverageRequestAdapter.BeverageRequestViewHolder> {
 
@@ -89,7 +90,8 @@ public class BeverageRequestAdapter extends RecyclerView.Adapter<BeverageRequest
     @Override
     public void onBindViewHolder(@NonNull BeverageRequestViewHolder holder, int position) {
         if(selectedPosition == position) {
-            holder.txtBeverageName.setTextColor(Color.GREEN);
+
+            holder.txtBeverageName.setTextColor(MaterialColors.getColor(holder.itemView.getRootView(), R.attr.colorPrimary));
         } else {
             holder.txtBeverageName.setTextColor(Color.GRAY);
         }

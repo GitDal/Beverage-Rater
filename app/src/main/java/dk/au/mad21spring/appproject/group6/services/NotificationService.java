@@ -82,14 +82,6 @@ public class NotificationService extends LifecycleService {
 
     private void handlePendingRequestsChanged(List<Beverage> beverages) {
         Log.d(TAG, "handlePendingRequestsChanged: beverages has changed");
-        Log.d(TAG, "handlePendingRequestsChanged: currentUser is admin = " + beverageRepository.currentUser.IsAdmin);
-
-        int index = 0;
-        for (Beverage request:
-                beverages) {
-            Log.d(TAG, "handlePendingRequestsChanged: " + index + ": " + request.toString());
-            index++;
-        }
 
         if(lastPendingRequestCount > beverages.size()) {
             Log.d(TAG, "handlePendingRequestsChanged: A request was resolved!");

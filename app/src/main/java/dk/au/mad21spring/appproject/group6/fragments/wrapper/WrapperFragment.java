@@ -120,7 +120,7 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
         Beverage detailsBeverage = detailsFragment.getBeverage();
 
         for (Beverage beverage : beverages) {
-            if (detailsBeverage != null && detailsBeverage.Id == beverage.Id) {
+            if (detailsBeverage != null && detailsBeverage.Id.equals(beverage.Id)) {
                 detailsFragment.setBeverage(beverage);
             }
 

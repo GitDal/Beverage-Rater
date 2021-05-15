@@ -28,20 +28,19 @@ import com.google.mlkit.vision.common.InputImage;
 
 import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
 
+
+// Inspiration on how to work with camera2 and barcode scanning using ML Kits bar code scanner came from:
+// https://www.youtube.com/watch?v=kuv8uK-5CLY
+// https://proandroiddev.com/building-barcode-qr-code-scanner-for-android-using-google-ml-kit-and-camerax-220b2852589e
+// https://developers.google.com/ml-kit/vision/barcode-scanning/android
+
+// The article from proAndroiddev was used to begin with as a guide, but the youtube video and the
+// documentation gave sufficient information on how to use barcode scanning with camera2
+
 public class BarcodeScanningActivity extends AppCompatActivity {
 
-    private static final int CAMERA_REQUEST = 1010;
     private static final int CAMERA_PERMISSION = 1;
     private static final String TAG = "BarcodeScanningActivity";
-
-
-//    PreviewView cameraPreviewView;
-//    CameraSelector cameraSelector;
-//    ProcessCameraProvider cameraProvider;
-//    Preview preview;
-//    ImageAnalysis analyzer;
-//    CameraViewModel vm;
-//    BarcodeScanner scanner;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -125,46 +124,6 @@ public class BarcodeScanningActivity extends AppCompatActivity {
                 },
                 ContextCompat.getMainExecutor(this)
         );
-
-//        vm = new ViewModelProvider(this).get(CameraViewModel.class);
-//        vm.GetCameraLiveData().observe(this, processCameraProvider -> {
-//            cameraProvider = processCameraProvider;
-//
-//            if (cameraProvider == null) {
-//                return;
-//            }
-//            if (preview != null) {
-//                cameraProvider.unbind(preview);
-//            }
-////            if(analyzer != null){
-////                analyzer.clearAnalyzer();
-////            }
-//
-//            preview = new Preview.Builder().build();
-//            preview.setSurfaceProvider(cameraPreviewView.createSurfaceProvider());
-//
-//            analyzer = new ImageAnalysis.Builder().build();
-//            analyzer.setAnalyzer(getMainExecutor(), new ImageAnalysis.Analyzer() {
-//                @Override
-//                public void analyze(@NonNull ImageProxy imageProxy) {
-//                    Log.d(TAG, "ANALYZER CALLED");
-//                    @SuppressLint("UnsafeExperimentalUsageError") Image mediaImage = imageProxy.getImage();
-//                    if (mediaImage != null) {
-//                        InputImage image = InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
-//
-//                        scanner.process(image).addOnSuccessListener(barcodes -> {
-//                            barcodes.forEach(barcode -> Log.d(TAG, "BARCODE: " + barcode.getRawValue()));
-//                        }).addOnFailureListener(failure ->
-//                                Log.e(TAG, "Failure Scanning: " + failure.getMessage())
-//                        ).addOnCompleteListener(complete ->
-//                                imageProxy.close()
-//                        );
-//                    }
-//                }
-//            });
-//
-//            cameraProvider.bindToLifecycle(this, cameraSelector, preview, analyzer);
-//        });
     }
 
    

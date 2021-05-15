@@ -78,9 +78,7 @@ public class RequestDetailsFragment extends Fragment {
 
         initializeFragments();
         setupUI(view);
-        vm.getRequest().observe(getViewLifecycleOwner(), beverageRequest -> {
-            updateContent(view, beverageRequest);
-        });
+        vm.getRequest().observe(getViewLifecycleOwner(), beverageRequest -> updateContent(view, beverageRequest));
     }
 
     private void initializeFragments() {

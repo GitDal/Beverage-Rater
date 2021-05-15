@@ -2,6 +2,9 @@ package dk.au.mad21spring.appproject.group6;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -31,6 +34,7 @@ import java.util.concurrent.Executors;
 
 import dk.au.mad21spring.appproject.group6.constants.BeverageDbFieldNames;
 import dk.au.mad21spring.appproject.group6.constants.GoogleSearchApi;
+import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
 import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.models.CurrentUser;
 import dk.au.mad21spring.appproject.group6.models.db.RequestStatus;
@@ -218,20 +222,58 @@ public class BeverageRepository {
 
     public void updateBeverage(Beverage beverage) { beverageDb.child(beverage.Id).setValue(beverage); }
 
-    public void updateBeverageRating(Beverage beverage, String ratingId, double globalRating, int userRating){
-        UserRating ur = new UserRating();
-        ur.userId = currentUser.Email;
-        ur.rating = userRating;
+    public void updateBeverageRating(Beverage beverage, int rating, Handler handler){
 
-        beverageDb.child(beverage.Id).child("GlobalRating").setValue(globalRating);
-        if(!ratingId.isEmpty()){
-            beverageDb.child(beverage.Id).child("UserRatings").child(ratingId).setValue(ur);
-        } else{
-            String key = beverageDb.child(beverage.Id).child("UserRatings").push().getKey();
-            Map map = new HashMap<>();
-            map.put(key, ur);
-            beverageDb.child(beverage.Id).child("UserRatings").updateChildren(map);
+        if(execService == null){
+            execService = Executors.newSingleThreadExecutor();
         }
+
+        execService.submit(() -> {
+            UserRating ur = new UserRating();
+            ur.userId = currentUser.Email;
+            ur.rating = rating;
+            boolean alreadyRatedByUser = false;
+            double score = 0;
+            int size = 0;
+            String ratingId = "";
+
+            if(beverage.UserRatings != null){
+                size += beverage.UserRatings.size();
+                for(Map.Entry<String, UserRating> userRating : beverage.UserRatings.entrySet()){
+                    if(userRating.getValue().userId.equals(currentUser.Email)){
+                        alreadyRatedByUser = true;
+                        ratingId = userRating.getKey();
+                        score += rating;
+                        continue;
+                    }
+                    score += (double) userRating.getValue().rating;
+                }
+            }
+
+            if(!alreadyRatedByUser){
+                size += 1;
+                score += rating;
+            }
+
+            score = score / size;
+
+            beverageDb.child(beverage.Id).child("GlobalRating").setValue(score);
+            if(!ratingId.isEmpty()){
+                beverageDb.child(beverage.Id).child("UserRatings").child(ratingId).setValue(ur);
+            } else{
+                String key = beverageDb.child(beverage.Id).child("UserRatings").push().getKey();
+                Map map = new HashMap<>();
+                map.put(key, ur);
+                beverageDb.child(beverage.Id).child("UserRatings").updateChildren(map);
+            }
+
+            Message msg = new Message();
+            Bundle msgData = new Bundle();
+            msgData.putInt(ResultExtras.UPDATE_RATING_RATING, rating);
+            msgData.putString(ResultExtras.UPDATE_RATING_NAME, beverage.Name);
+            msg.setData(msgData);
+            handler.sendMessage(msg);
+        });
     }
 
     public void deleteBeverage(String beverageId) {

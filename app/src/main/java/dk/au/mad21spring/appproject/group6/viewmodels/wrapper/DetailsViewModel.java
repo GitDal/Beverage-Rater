@@ -1,6 +1,7 @@
 package dk.au.mad21spring.appproject.group6.viewmodels.wrapper;
 
 import android.app.Application;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -54,8 +55,8 @@ public class DetailsViewModel extends AndroidViewModel {
         return _beverageRepository.currentUser;
     }
 
-    public void updateBeverageScore(Beverage beverage, String ratingId, double globalRating, int userRating) {
-        _beverageRepository.updateBeverageRating(beverage, ratingId, globalRating, userRating);
+    public void updateBeverageScore(Beverage beverage, int userRating, Handler handler) {
+        _beverageRepository.updateBeverageRating(beverage, userRating, handler);
     }
 
 }

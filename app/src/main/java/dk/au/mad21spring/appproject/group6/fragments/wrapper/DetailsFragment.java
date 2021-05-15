@@ -24,7 +24,6 @@ import com.bumptech.glide.Glide;
 
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
@@ -113,46 +112,8 @@ public class DetailsFragment extends Fragment {
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(executor == null){
-                    executor = Executors.newSingleThreadExecutor();
-                }
-
-                executor.submit(() -> {
-                    boolean alreadyRatedByUser = false;
-                    int rating = userRatingBar.getProgress() + 1;
-                    double score = 0;
-                    int size = 0;
-                    String ratingId = "";
-
-                    Beverage beverage = vm.getBeverage().getValue();
-                    if(beverage.UserRatings != null){
-                        size += beverage.UserRatings.size();
-                        for(Map.Entry<String, UserRating> userRating : beverage.UserRatings.entrySet()){
-                            if(userRating.getValue().userId.equals(vm.getCurrentUser().Email)){
-                                alreadyRatedByUser = true;
-                                ratingId = userRating.getKey();
-                                score += rating;
-                                continue;
-                            }
-                            score += (double) userRating.getValue().rating;
-                        }
-                    }
-
-                    if(!alreadyRatedByUser){
-                        size += 1;
-                        score += rating;
-                    }
-
-                    score = score / size;
-                    vm.updateBeverageScore(beverage, ratingId, score, rating);
-
-                    Message msg = new Message();
-                    Bundle msgData = new Bundle();
-                    msgData.putInt(ResultExtras.UPDATE_RATING_RATING, rating);
-                    msgData.putString(ResultExtras.UPDATE_RATING_NAME, beverage.Name);
-                    msg.setData(msgData);
-                    updateHandler.sendMessage(msg);
-                });
+                int rating = userRatingBar.getProgress() + 1;
+                vm.updateBeverageScore(vm.getBeverage().getValue(), rating, updateHandler);
             }
         });
 

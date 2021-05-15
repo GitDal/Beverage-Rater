@@ -29,4 +29,5 @@
     <string name="profile_beverages_approved">Beverages approved:</string>
     <string name="detailsBack">Back</string>
     <string name="detailsUpdateRating">Update Rating</string>
+    <string name="updateRatingText">rated</string>
 </resources>

@@ -22,13 +22,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import dk.au.mad21spring.appproject.group6.constants.GoogleSearchApi;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.CurrentUser;
 import dk.au.mad21spring.appproject.group6.models.RequestStatus;
+import dk.au.mad21spring.appproject.group6.models.UserRating;
 import dk.au.mad21spring.appproject.group6.models.api.GoogleSearchResponse;
 import dk.au.mad21spring.appproject.group6.models.api.Image;
 import dk.au.mad21spring.appproject.group6.models.api.Item;
@@ -187,11 +190,26 @@ public class BeverageRepository {
     /* Mutations */
 
     public void addBeverage(Beverage beverage){
-
         beverageDb.child(beverage.Id).setValue(beverage);
     }
 
     public void updateBeverage(Beverage beverage) { beverageDb.child(beverage.Id).setValue(beverage); }
+
+    public void updateBeverageRating(Beverage beverage, String ratingId, double globalRating, int userRating){
+        UserRating ur = new UserRating();
+        ur.userId = currentUser.Email;
+        ur.rating = userRating;
+
+        beverageDb.child(beverage.Id).child("GlobalRating").setValue(globalRating);
+        if(!ratingId.isEmpty()){
+            beverageDb.child(beverage.Id).child("UserRatings").child(ratingId).setValue(ur);
+        } else{
+            String key = beverageDb.child(beverage.Id).child("UserRatings").push().getKey();
+            Map map = new HashMap<>();
+            map.put(key, ur);
+            beverageDb.child(beverage.Id).child("UserRatings").updateChildren(map);
+        }
+    }
 
     public void deleteBeverage(String beverageId) {
         beverageDb.child(beverageId).removeValue();

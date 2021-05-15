@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Map;
 
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
@@ -81,8 +82,8 @@ public class ProfileFragment extends Fragment {
                 continue;
             }
 
-            for(UserRating userRating : beverage.UserRatings){
-                if(userRating.userId.equals(currentUser.Email)){
+            for(Map.Entry<String, UserRating> userRating : beverage.UserRatings.entrySet()){
+                if(userRating.getValue().userId.equals(currentUser.Email)){
                     numberOfRatingsGiven++;
                     break;
                 }

@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +19,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import dk.au.mad21spring.appproject.group6.R;
+import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
 import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.UserRating;
 import dk.au.mad21spring.appproject.group6.viewmodels.wrapper.DetailsViewModel;
@@ -29,12 +40,12 @@ public class DetailsFragment extends Fragment {
 
     TextView name, company, description, globalRating, userRating;
     SeekBar userRatingBar;
-    Button backBtn, UpdateBtn;
+    Button backBtn, updateBtn;
     ImageView img;
     DetailsViewModel vm;
-
+    Handler updateHandler;
+    ExecutorService executor;
     private WrapperInterface _handler;
-    WrapperFragment.Orientation orientation;
 
     public DetailsFragment() {
     }
@@ -47,12 +58,6 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            orientation = WrapperFragment.Orientation.PORTRAIT;
-        } else {
-            orientation = WrapperFragment.Orientation.LANDSCAPE;
-        }
     }
 
     @Override
@@ -72,6 +77,17 @@ public class DetailsFragment extends Fragment {
         img = view.findViewById(R.id.detailsImage);
         userRatingBar = view.findViewById(R.id.detailsRatingbar);
         backBtn = view.findViewById(R.id.detailsBackBtn);
+        updateBtn = view.findViewById(R.id.detailsUpdateRatingBtn);
+
+        updateHandler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                String name = msg.getData().getString(ResultExtras.UPDATE_RATING_NAME);
+                int rating = msg.getData().getInt(ResultExtras.UPDATE_RATING_RATING);
+                indicateUpdate(name, rating);
+            }
+        };
 
         userRatingBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -90,14 +106,56 @@ public class DetailsFragment extends Fragment {
             }
         });
 
-        if(orientation == WrapperFragment.Orientation.LANDSCAPE){
-            backBtn.setVisibility(View.GONE);
-        }
-
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _handler.switchFragment(WrapperViewModel.SelectedFragment.LIST);
+            }
+        });
+
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(executor == null){
+                    executor = Executors.newSingleThreadExecutor();
+                }
+
+                executor.submit(() -> {
+                    boolean alreadyRatedByUser = false;
+                    int rating = userRatingBar.getProgress();
+                    double score = 0;
+                    int size = 0;
+                    String ratingId = "";
+
+                    Beverage beverage = vm.getBeverage().getValue();
+                    if(beverage.UserRatings != null){
+                        size += beverage.UserRatings.size();
+                        for(Map.Entry<String, UserRating> userRating : beverage.UserRatings.entrySet()){
+                            if(userRating.getValue().userId.equals(vm.getCurrentUser().Email)){
+                                alreadyRatedByUser = true;
+                                ratingId = userRating.getKey();
+                                score += rating;
+                                continue;
+                            }
+                            score += (double) userRating.getValue().rating;
+                        }
+                    }
+
+                    if(!alreadyRatedByUser){
+                        size += 1;
+                        score += rating;
+                    }
+
+                    score = score / size;
+                    vm.updateBeverageScore(beverage, ratingId, score, rating);
+
+                    Message msg = new Message();
+                    Bundle msgData = new Bundle();
+                    msgData.putInt(ResultExtras.UPDATE_RATING_RATING, rating);
+                    msgData.putString(ResultExtras.UPDATE_RATING_NAME, beverage.Name);
+                    msg.setData(msgData);
+                    updateHandler.sendMessage(msg);
+                });
             }
         });
 
@@ -114,6 +172,10 @@ public class DetailsFragment extends Fragment {
                 updateUi(beverage);
             }
         });
+    }
+
+    private void indicateUpdate(String name, int rating) {
+        Toast.makeText(getContext(), name + " " + getString(R.string.updateRatingText) + " " + rating, Toast.LENGTH_SHORT).show();
     }
 
     public void setBeverage(Beverage beverage) {
@@ -143,9 +205,9 @@ public class DetailsFragment extends Fragment {
         }
 
         Integer userRatingValue = 0;
-        for(UserRating ur : beverage.UserRatings){
-            if(vm.getCurrentUser().Email.equals(ur.userId)){
-                userRatingValue = (Integer) ur.rating;
+        for(Map.Entry<String, UserRating> ur : beverage.UserRatings.entrySet()){
+            if(vm.getCurrentUser().Email.equals(ur.getValue().userId)){
+                userRatingValue = (Integer) ur.getValue().rating;
                 break;
             }
         }

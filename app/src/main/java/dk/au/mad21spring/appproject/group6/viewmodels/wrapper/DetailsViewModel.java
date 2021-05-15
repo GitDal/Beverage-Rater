@@ -54,4 +54,8 @@ public class DetailsViewModel extends AndroidViewModel {
         return _beverageRepository.currentUser;
     }
 
+    public void updateBeverageScore(Beverage beverage, String ratingId, double globalRating, int userRating) {
+        _beverageRepository.updateBeverageRating(beverage, ratingId, globalRating, userRating);
+    }
+
 }

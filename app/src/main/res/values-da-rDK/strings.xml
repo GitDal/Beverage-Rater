@@ -28,4 +28,7 @@
     <string name="detailsUpdateRating">Opdater bedømmelse</string>
     <string name="updateRatingText">opdateret bedømmelse til</string>
     <string name="beverage_detail_rating_text">Bedøm drikkevare:</string>
+    <string name="notification_default_content_title">Ingen nye opdateringer...</string>
+    <string name="notification_request_resolved_content_text">En af dine anmodninger er blevet håndteret af en moderator.</string>
+    <string name="notification_content_title">Drikkevarer-anmodning håndteret</string>
 </resources>

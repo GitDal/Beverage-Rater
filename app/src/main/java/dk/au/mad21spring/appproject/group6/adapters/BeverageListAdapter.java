@@ -64,7 +64,7 @@ public class BeverageListAdapter extends RecyclerView.Adapter<BeverageListAdapte
 
         holder.beverageName.setText(beverage.Name);
         holder.beverageCompany.setText(beverage.CompanyName);
-        holder.beverageRating.setText("" + beverage.GlobalRating);
+        holder.beverageRating.setText("" + String.format("%.1f", beverage.GlobalRating));
 
         Glide.with(holder.beverageImg.getContext()).load(beverage.ImageUrl).into(holder.beverageImg);
 

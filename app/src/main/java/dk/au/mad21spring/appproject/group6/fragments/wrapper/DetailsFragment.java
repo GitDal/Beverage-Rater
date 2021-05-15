@@ -190,7 +190,7 @@ public class DetailsFragment extends Fragment {
         name.setText(beverage.Name);
         company.setText(beverage.CompanyName);
         description.setText(beverage.BeverageInfo);
-        globalRating.setText(beverage.GlobalRating.toString());
+        globalRating.setText(String.format("%.1f", beverage.GlobalRating));
         Glide.with(img.getContext()).load(beverage.ImageUrl).into(img);
         if(vm.getUpdateUserRatingBar().equals(true)){
             updateUserRatingElements(beverage);

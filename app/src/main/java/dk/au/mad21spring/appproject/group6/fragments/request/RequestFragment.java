@@ -26,8 +26,7 @@ import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageRequestAdapter;
 import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
-import dk.au.mad21spring.appproject.group6.models.ActionResult;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestViewModel;
 
 import static android.app.Activity.RESULT_OK;

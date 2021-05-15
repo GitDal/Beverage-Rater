@@ -24,7 +24,7 @@ import dk.au.mad21spring.appproject.group6.BarcodeScanningActivity;
 import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.adapters.BeverageListAdapter;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.viewmodels.wrapper.ListViewModel;
 
 import static android.app.Activity.RESULT_OK;

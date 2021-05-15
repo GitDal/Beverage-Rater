@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import dk.au.mad21spring.appproject.group6.BeverageRepository;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.models.CurrentUser;
 
 public class ProfileViewModel extends AndroidViewModel {

@@ -17,11 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 import dk.au.mad21spring.appproject.group6.R;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.models.CurrentUser;
-import dk.au.mad21spring.appproject.group6.models.UserRating;
+import dk.au.mad21spring.appproject.group6.models.db.UserRating;
 import dk.au.mad21spring.appproject.group6.viewmodels.ProfileViewModel;
-import dk.au.mad21spring.appproject.group6.viewmodels.wrapper.ListViewModel;
 
 public class ProfileFragment extends Fragment {
 

@@ -17,9 +17,8 @@ import com.bumptech.glide.Glide;
 
 import dk.au.mad21spring.appproject.group6.EditTextExtensions;
 import dk.au.mad21spring.appproject.group6.R;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
 import dk.au.mad21spring.appproject.group6.models.BeverageRequestDetailsDTO;
-import dk.au.mad21spring.appproject.group6.models.RequestStatus;
+import dk.au.mad21spring.appproject.group6.models.db.RequestStatus;
 import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestDetailsViewModel;
 
 public class RequestDetailsFragment extends Fragment {

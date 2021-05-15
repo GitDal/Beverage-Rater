@@ -4,8 +4,8 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
-import dk.au.mad21spring.appproject.group6.models.Beverage;
-import dk.au.mad21spring.appproject.group6.models.RequestStatus;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.RequestStatus;
 
 public class RequestDetailsActionsModeratorViewModel extends RequestDetailsBaseViewModel {
 

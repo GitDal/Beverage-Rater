@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import dk.au.mad21spring.appproject.group6.BeverageRepository;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 
 public class RequestDetailsBaseViewModel extends AndroidViewModel {
 

@@ -1,7 +1,6 @@
 package dk.au.mad21spring.appproject.group6.fragments.wrapper;
 
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +16,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 import dk.au.mad21spring.appproject.group6.R;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.viewmodels.wrapper.WrapperViewModel;
 
 public class WrapperFragment extends Fragment implements WrapperInterface {

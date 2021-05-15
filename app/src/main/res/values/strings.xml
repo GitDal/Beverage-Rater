@@ -30,4 +30,7 @@
     <string name="detailsBack">Back</string>
     <string name="detailsUpdateRating">Update Rating</string>
     <string name="updateRatingText">rated</string>
+    <string name="notification_content_title">Beverage-request resolved</string>
+    <string name="notification_default_content_title">No new updates…</string>
+    <string name="notification_request_resolved_content_text">One of your requests was resolved by a moderator.</string>
 </resources>

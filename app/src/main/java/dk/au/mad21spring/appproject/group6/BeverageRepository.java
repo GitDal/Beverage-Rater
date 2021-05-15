@@ -26,12 +26,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import dk.au.mad21spring.appproject.group6.constants.BeverageDbFieldNames;
 import dk.au.mad21spring.appproject.group6.constants.GoogleSearchApi;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.models.CurrentUser;
-import dk.au.mad21spring.appproject.group6.models.RequestStatus;
-import dk.au.mad21spring.appproject.group6.models.UserRating;
+import dk.au.mad21spring.appproject.group6.models.db.RequestStatus;
+import dk.au.mad21spring.appproject.group6.models.db.UserRating;
 import dk.au.mad21spring.appproject.group6.models.api.GoogleSearchResponse;
 import dk.au.mad21spring.appproject.group6.models.api.Image;
 import dk.au.mad21spring.appproject.group6.models.api.Item;
@@ -42,6 +45,7 @@ public class BeverageRepository {
     private static BeverageRepository instance;
     private DatabaseReference beverageDb;
     private RequestQueue queue;
+    private ExecutorService execService;
 
     public static BeverageRepository getBeverageRepository(final Context context) {
         if(instance == null) {
@@ -57,6 +61,7 @@ public class BeverageRepository {
     private BeverageRepository(Context context) {
         queue = Volley.newRequestQueue(context.getApplicationContext());
         beverageDb = FirebaseDatabase.getInstance().getReference("beverages");
+        execService = Executors.newSingleThreadExecutor();
     }
 
     public void ResolveUser() {
@@ -101,11 +106,7 @@ public class BeverageRepository {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Beverage> beverageList = new ArrayList<Beverage>();
-                for(DataSnapshot beverageSnapshot : snapshot.getChildren()){
-                    beverageList.add(beverageSnapshot.getValue(Beverage.class));
-                }
-                beverageList.sort((o1, o2) -> (int) (o2.GlobalRating - o1.GlobalRating));
+                List<Beverage> beverageList = getBeveragesFromSnapshot(snapshot);
                 beverages.setValue(beverageList);
             }
 
@@ -119,38 +120,60 @@ public class BeverageRepository {
 
     public void getAllApprovedBeverages(MutableLiveData<List<Beverage>> beverages){
         ValueEventListener beveragesListener = new ValueEventListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Beverage> beverageList = new ArrayList<Beverage>();
-                for(DataSnapshot beverageSnapshot : snapshot.getChildren()){
-                    Beverage beverage = beverageSnapshot.getValue(Beverage.class);
-                    if(beverage.Status == RequestStatus.APPROVED){
-                        beverageList.add(beverage);
-                    }
+                List<Beverage> beverageList = getBeveragesFromSnapshot(snapshot);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    beverageList.sort((o1, o2) -> (int) (o2.GlobalRating - o1.GlobalRating));
                 }
-                beverageList.sort((o1, o2) -> (int) (o2.GlobalRating - o1.GlobalRating));
                 beverages.setValue(beverageList);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         };
-        beverageDb.addValueEventListener(beveragesListener);
+
+        beverageDb.orderByChild(BeverageDbFieldNames.Status).equalTo(RequestStatus.APPROVED.toString()).addValueEventListener(beveragesListener);
     }
 
     public void getAllPendingBeverages(MutableLiveData<List<Beverage>> beverages) {
         ValueEventListener beveragesListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Beverage> beverageList = new ArrayList<Beverage>();
-                for(DataSnapshot beverageSnapshot : snapshot.getChildren()){
-                    Beverage beverage = beverageSnapshot.getValue(Beverage.class);
-                    if(beverage.Status == RequestStatus.PENDING){
-                        beverageList.add(beverage);
-                    }
+                List<Beverage> beverageList = getBeveragesFromSnapshot(snapshot);
+                beverages.setValue(beverageList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        };
+
+        beverageDb.orderByChild(BeverageDbFieldNames.Status).equalTo(RequestStatus.PENDING.toString()).addValueEventListener(beveragesListener);
+    }
+
+    public void getAllPendingBeveragesRequestedByUser(MutableLiveData<List<Beverage>> beverages) {
+        ValueEventListener beveragesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Beverage> beverageList = getBeveragesFromSnapshotRequestedByCurrentUser(snapshot);
+                beverages.setValue(beverageList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        };
+
+        beverageDb.orderByChild(BeverageDbFieldNames.Status).equalTo(RequestStatus.PENDING.toString()).addValueEventListener(beveragesListener);
+    }
+
+    public void getAllBeveragesRequestedByUser(MutableLiveData<List<Beverage>> beverages) {
+        ValueEventListener beveragesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Beverage> beverageList = getBeveragesFromSnapshotRequestedByCurrentUser(snapshot);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    beverageList.sort((b1, b2) -> b1.Status.getId() - b2.Status.getId());
                 }
                 beverages.setValue(beverageList);
             }
@@ -163,28 +186,28 @@ public class BeverageRepository {
         beverageDb.addValueEventListener(beveragesListener);
     }
 
-    public void getAllBeveragesRequestedByUser(MutableLiveData<List<Beverage>> beverages) {
-        ValueEventListener beveragesListener = new ValueEventListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Beverage> beverageList = new ArrayList<Beverage>();
-                for(DataSnapshot beverageSnapshot : snapshot.getChildren()){
-                    Beverage beverage = beverageSnapshot.getValue(Beverage.class);
-                    if(beverage.RequestedByUserId.equals(currentUser.Email)){
-                        beverageList.add(beverage);
-                    }
-                }
-                beverageList.sort((b1, b2) -> b1.Status.getId() - b2.Status.getId());
-                beverages.setValue(beverageList);
-            }
+    private List<Beverage> getBeveragesFromSnapshot(@NonNull DataSnapshot snapshot) {
+        List<Beverage> beverageList = new ArrayList<Beverage>();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        for(DataSnapshot beverageSnapshot : snapshot.getChildren()){
+            Beverage beverage = beverageSnapshot.getValue(Beverage.class);
+            beverageList.add(beverage);
+        }
 
+        return beverageList;
+    }
+
+    private List<Beverage> getBeveragesFromSnapshotRequestedByCurrentUser(@NonNull DataSnapshot snapshot) {
+        List<Beverage> beverageList = new ArrayList<Beverage>();
+
+        for(DataSnapshot beverageSnapshot : snapshot.getChildren()){
+            Beverage beverage = beverageSnapshot.getValue(Beverage.class);
+            if(beverage.RequestedByUserId.equals(currentUser.Email)) {
+                beverageList.add(beverage);
             }
-        };
-        beverageDb.addValueEventListener(beveragesListener);
+        }
+
+        return beverageList;
     }
 
     /* Mutations */
@@ -217,50 +240,51 @@ public class BeverageRepository {
 
     /* API */
 
-    public void updateImageUrlForProduct(Beverage beverage, String productName) {
-        String requestUrl = GoogleSearchApi.BaseUrl + "key=" + GoogleSearchApi.ApiKey + "&cx=" + GoogleSearchApi.ImagesGoogleEngineId + "&searchType=image" + "&q=" + productName;
-        //example: "key=INSERT_YOUR_API_KEY&cx=017576662512468239146:omuauf_lfve&q=lectures"
+    public void updateImageUrlForProductAsync(Beverage beverage, String productName) {
+        execService.submit(() -> {
+            String requestUrl = GoogleSearchApi.BaseUrl + "key=" + GoogleSearchApi.ApiKey + "&cx=" + GoogleSearchApi.ImagesGoogleEngineId + "&searchType=image" + "&q=" + productName;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl,
-                response -> {
-                    if(!response.isEmpty()) {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl,
+                    response -> {
+                        if(!response.isEmpty()) {
 
-                        Log.d(TAG, "getImageUrlForProduct: Got Response:");
-                        Gson gson = new GsonBuilder().create();
-                        GoogleSearchResponse imageResponse = gson.fromJson(response, GoogleSearchResponse.class);
+                            Log.d(TAG, "getImageUrlForProduct: Got Response:");
+                            Gson gson = new GsonBuilder().create();
+                            GoogleSearchResponse imageResponse = gson.fromJson(response, GoogleSearchResponse.class);
 
-                        List<Item> results = imageResponse.getItems();
-                        if(results == null) {
-                            Log.d(TAG, "updateImageUrlForProduct: No image-results found for beverage: " + (beverage != null ? beverage.toString() : productName));
-                            return;
-                        }
+                            List<Item> results = imageResponse.getItems();
+                            if(results == null) {
+                                Log.d(TAG, "updateImageUrlForProduct: No image-results found for beverage: " + (beverage != null ? beverage.toString() : productName));
+                                return;
+                            }
 
-                        ListIterator<Item> li = results.listIterator();
+                            ListIterator<Item> li = results.listIterator();
 
-                        while(li.hasNext()) {
-                            Item imageItem = li.next();
-                            Image image =  imageItem.getImage();
+                            while(li.hasNext()) {
+                                Item imageItem = li.next();
+                                Image image =  imageItem.getImage();
 
-                            if(image != null) {
-                                String thumbnailUrl = image.getThumbnailLink();
+                                if(image != null) {
+                                    String thumbnailUrl = image.getThumbnailLink();
 
-                                if(!thumbnailUrl.isEmpty()) {
-                                    Log.d(TAG, "getImageUrlForProduct: New image-url found for beverage: " + beverage.toString());
-                                    beverage.ImageUrl = thumbnailUrl;
-                                    updateBeverage(beverage);
-                                    return;
+                                    if(!thumbnailUrl.isEmpty()) {
+                                        Log.d(TAG, "getImageUrlForProduct: New image-url found for beverage: " + beverage.toString());
+                                        beverage.ImageUrl = thumbnailUrl;
+                                        updateBeverage(beverage);
+                                        return;
+                                    }
                                 }
                             }
+
+                        } else {
+                            Log.d(TAG, "getImageUrlForProduct: Response was empty");
                         }
+                    }, error -> {
+                Log.d(TAG, "getImageUrlForProduct: An error occurred while fetching data: " +  error.toString());
+            });
 
-                    } else {
-                        Log.d(TAG, "getImageUrlForProduct: Response was empty");
-                    }
-                }, error -> {
-            Log.d(TAG, "getImageUrlForProduct: An error occurred while fetching data: " +  error.toString());
+            //Add request to Volley-queue
+            queue.add(stringRequest);
         });
-
-        //Add request to Volley-queue
-        queue.add(stringRequest);
     }
 }

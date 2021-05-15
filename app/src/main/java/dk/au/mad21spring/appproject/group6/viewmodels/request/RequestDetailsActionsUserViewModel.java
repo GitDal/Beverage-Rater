@@ -6,8 +6,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import dk.au.mad21spring.appproject.group6.models.ActionResult;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
-import dk.au.mad21spring.appproject.group6.models.RequestStatus;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.RequestStatus;
 
 public class RequestDetailsActionsUserViewModel extends RequestDetailsBaseViewModel {
 
@@ -38,7 +38,7 @@ public class RequestDetailsActionsUserViewModel extends RequestDetailsBaseViewMo
 
         beverageRequest.Status = RequestStatus.PENDING;
         beverageRepository.updateBeverage(beverageRequest);
-        beverageRepository.updateImageUrlForProduct(beverageRequest, beverageRequest.Name);
+        beverageRepository.updateImageUrlForProductAsync(beverageRequest, beverageRequest.Name);
         return ActionResult.Success("Request was sent!");
     }
 

@@ -27,6 +27,7 @@ import dk.au.mad21spring.appproject.group6.constants.InstanceStateExtras;
 import dk.au.mad21spring.appproject.group6.fragments.ProfileFragment;
 import dk.au.mad21spring.appproject.group6.fragments.wrapper.WrapperFragment;
 import dk.au.mad21spring.appproject.group6.fragments.request.RequestFragment;
+import dk.au.mad21spring.appproject.group6.services.NotificationService;
 import dk.au.mad21spring.appproject.group6.viewmodels.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             goToSignIn();
         } else {
             vm.UpdateCurrentUser();
+            startNotificationService();
         }
 
         initializeFragments();
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToSignIn() {
+        stopNotificationService();
         Intent authIntent = new Intent(this, AuthActivity.class);
         startActivityForResult(authIntent, AUTH_ACTIVITY);
     }
@@ -208,10 +211,11 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == AUTH_ACTIVITY) {
             if (resultCode == RESULT_OK) {
                 if(auth.getCurrentUser() != null){
+                    vm.UpdateCurrentUser();                         //resolve whether or not user is admin
                     invalidateOptionsMenu();                        //To update action-bar with new username (onPrepareOptionsMenu gets called again)
                     reInitializeFragments();
                     mainTabs.selectTab(mainTabs.getTabAt(0)); // Update tab to display default tab
-                    vm.UpdateCurrentUser();
+                    startNotificationService();                     // Start notification service
                     return;
                 }
             }
@@ -228,5 +232,17 @@ public class MainActivity extends AppCompatActivity {
         if(!wrapperFragment.handlesOnBackPressed()){
             super.onBackPressed();
         }
+    }
+
+    private void startNotificationService() {
+        Log.d(TAG, "startNotificationService");
+        Intent startServiceIntent = new Intent(this, NotificationService.class);
+        startService(startServiceIntent);
+    }
+
+    private void stopNotificationService() {
+        Log.d(TAG, "stopNotificationService");
+        Intent startServiceIntent = new Intent(this, NotificationService.class);
+        stopService(startServiceIntent);
     }
 }

@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import dk.au.mad21spring.appproject.group6.R;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 
 public class BeverageListAdapter extends RecyclerView.Adapter<BeverageListAdapter.BeverageViewHolder> {
 

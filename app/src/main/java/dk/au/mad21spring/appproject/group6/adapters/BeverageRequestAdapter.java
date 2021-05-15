@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import dk.au.mad21spring.appproject.group6.R;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.color.MaterialColors;

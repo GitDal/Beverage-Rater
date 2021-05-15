@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 import dk.au.mad21spring.appproject.group6.BeverageRepository;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 
 public class WrapperViewModel extends AndroidViewModel {
     private BeverageRepository _beverageRepository;

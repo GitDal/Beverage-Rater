@@ -12,13 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.ActionResult;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.models.BeverageRequestDetailsDTO;
-import dk.au.mad21spring.appproject.group6.models.RequestStatus;
+import dk.au.mad21spring.appproject.group6.models.db.RequestStatus;
 import dk.au.mad21spring.appproject.group6.viewmodels.request.RequestDetailsActionsUserViewModel;
 
 public class RequestDetailsActionsUserFragment extends Fragment {

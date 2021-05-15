@@ -1,6 +1,5 @@
 package dk.au.mad21spring.appproject.group6.fragments.wrapper;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,15 +23,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.constants.ResultExtras;
-import dk.au.mad21spring.appproject.group6.models.Beverage;
-import dk.au.mad21spring.appproject.group6.models.UserRating;
+import dk.au.mad21spring.appproject.group6.models.db.Beverage;
+import dk.au.mad21spring.appproject.group6.models.db.UserRating;
 import dk.au.mad21spring.appproject.group6.viewmodels.wrapper.DetailsViewModel;
 import dk.au.mad21spring.appproject.group6.viewmodels.wrapper.WrapperViewModel;
 

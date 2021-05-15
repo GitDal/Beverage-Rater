@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/requestDetailsUserConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.request.RequestDetailsFragment">
+
+    <ImageView
+        android:id="@+id/requestDetailsBeverageImg"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <EditText
+        android:id="@+id/requestDetailsBeverageName"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:hint="@string/product_name_hint"
+        android:inputType="textPersonName"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/requestDetailsBeverageImg"
+        app:layout_constraintTop_toTopOf="@+id/requestDetailsBeverageImg" />
+
+    <EditText
+        android:id="@+id/requestDetailsCompanyName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="@string/company_name_hint"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/requestDetailsCompanyLabel"
+        app:layout_constraintEnd_toEndOf="@+id/requestDetailsBeverageName"
+        app:layout_constraintStart_toEndOf="@+id/requestDetailsCompanyLabel"
+        app:layout_constraintTop_toTopOf="@+id/requestDetailsCompanyLabel" />
+
+    <TextView
+        android:id="@+id/requestDetailsCompanyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/company_label"
+        app:layout_constraintStart_toStartOf="@+id/requestDetailsBeverageName"
+        app:layout_constraintTop_toBottomOf="@+id/requestDetailsBeverageName" />
+
+    <TextView
+        android:id="@+id/requestDetailsBeverageInfoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/info_label"
+        app:layout_constraintStart_toStartOf="@+id/requestDetailsBeverageImg"
+        app:layout_constraintTop_toBottomOf="@+id/requestDetailsBeverageImg" />
+
+    <EditText
+        android:id="@+id/requestDetailsInfoTxt"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/beverage_info_hint"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/requestDetailsBeverageInfoLabel"
+        app:layout_constraintTop_toBottomOf="@+id/requestDetailsBeverageInfoLabel" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/requestDetailsActionsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        app:layout_constraintStart_toEndOf="@+id/requestDetailsInfoTxt"
+        app:layout_constraintTop_toTopOf="@+id/requestDetailsInfoTxt">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

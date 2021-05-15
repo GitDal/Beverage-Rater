@@ -8,4 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_blue">#C7DDEF</color>
+
+    <!-- Custom colors -->
+    <color name="aero_blue">#D7FDEC</color>
+    <color name="magic_mint_blue">#A9FBD7</color>
+    <color name="skobeloff_blue">#037171</color>
+    <color name="colombia_blue">#03312E</color>
+    <color name="rich_black">#0C120C</color>
+
 </resources>

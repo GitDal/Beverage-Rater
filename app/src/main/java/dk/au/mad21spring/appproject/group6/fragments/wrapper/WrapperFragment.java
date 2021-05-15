@@ -22,6 +22,9 @@ import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.viewmodels.wrapper.WrapperViewModel;
 
+// Inspiration of how to switch between fragments in portrait mode came from the Arnie Movie example project
+// Given in the lecture about fragments
+
 public class WrapperFragment extends Fragment implements WrapperInterface {
 
     private static final String TAG = "WrapperFragment";

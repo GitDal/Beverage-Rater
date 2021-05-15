@@ -89,7 +89,7 @@ public class DetailsFragment extends Fragment {
         userRatingBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                userRating.setText("" + progress);
+                userRating.setText("" + (progress + 1));
             }
 
             @Override
@@ -119,7 +119,7 @@ public class DetailsFragment extends Fragment {
 
                 executor.submit(() -> {
                     boolean alreadyRatedByUser = false;
-                    int rating = userRatingBar.getProgress();
+                    int rating = userRatingBar.getProgress() + 1;
                     double score = 0;
                     int size = 0;
                     String ratingId = "";
@@ -197,7 +197,7 @@ public class DetailsFragment extends Fragment {
     private void updateUserRatingElements(Beverage beverage) {
         if(beverage.UserRatings == null){
             userRatingBar.setProgress(0);
-            userRating.setText("" + 0);
+            userRating.setText("" + 1);
             return;
         }
 
@@ -209,7 +209,7 @@ public class DetailsFragment extends Fragment {
             }
         }
 
-        userRatingBar.setProgress(userRatingValue);
+        userRatingBar.setProgress(userRatingValue - 1);
         userRating.setText("" + userRatingValue);
     }
 

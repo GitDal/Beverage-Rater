@@ -125,7 +125,7 @@ public class BeverageRepository {
                 List<Beverage> beverageList = getBeveragesFromSnapshot(snapshot);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    beverageList.sort((o1, o2) -> (int) (o2.GlobalRating - o1.GlobalRating));
+                    beverageList.sort((o1, o2) -> o2.GlobalRating.compareTo(o1.GlobalRating));
                 }
                 beverages.setValue(beverageList);
             }

@@ -15,6 +15,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import dk.au.mad21spring.appproject.group6.R;
 import dk.au.mad21spring.appproject.group6.models.db.Beverage;
 import dk.au.mad21spring.appproject.group6.viewmodels.wrapper.WrapperViewModel;
@@ -31,6 +34,7 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
     private static final String BEVERAGE_LIST_FRAG = "beverage_list_fragment";
     private static final String BEVERAGE_DETAILS_FRAG = "beverage_details_fragment";
 
+    ExecutorService executor;
     WrapperViewModel vm;
     ListFragment listFragment;
     DetailsFragment detailsFragment;
@@ -108,29 +112,29 @@ public class WrapperFragment extends Fragment implements WrapperInterface {
     }
 
     private void updateList(List<Beverage> beverages, String query) {
-        if(beverages == null){
+        if (beverages == null) {
             return;
         }
 
         List<Beverage> queriedBeverages = new ArrayList<Beverage>();
         Beverage detailsBeverage = detailsFragment.getBeverage();
 
-        for(Beverage beverage : beverages){
-            if(detailsBeverage != null && detailsBeverage.Id == beverage.Id){
+        for (Beverage beverage : beverages) {
+            if (detailsBeverage != null && detailsBeverage.Id == beverage.Id) {
                 detailsFragment.setBeverage(beverage);
             }
 
-            if(beverage.Name.toLowerCase().contains(query.toLowerCase()) || beverage.CompanyName.toLowerCase().contains(query.toLowerCase())){
+            if (beverage.Name.toLowerCase().contains(query.toLowerCase()) || beverage.CompanyName.toLowerCase().contains(query.toLowerCase())) {
                 queriedBeverages.add(beverage);
                 continue;
             }
 
-            if(beverage.EanNumbers == null){
+            if (beverage.EanNumbers == null) {
                 continue;
             }
 
-            for(String ean : beverage.EanNumbers){
-                if(ean.toLowerCase().contains(query.toLowerCase())){
+            for (String ean : beverage.EanNumbers) {
+                if (ean.toLowerCase().contains(query.toLowerCase())) {
                     queriedBeverages.add(beverage);
                     break;
                 }

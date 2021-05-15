@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Beverage-Rater</string>
+    <string name="list_beverage_img_description">Billede af drikkevare</string>
+    <string name="add_beverage_button_text">Tilføj ny drikkevare</string>
+    <string name="add_beverage_barcode_scanner_img_description">Stregkode scanner billede</string>
+    <string name="auth_login_btn_text">Log ind</string>
+    <string name="auth_signup_button_text">Opret bruger</string>
+    <string name="appbar_action_signOut">Log ud</string>
+    <string name="company_label">Producent:</string>
+    <string name="info_label">Info:</string>
+    <string name="send_request">Send</string>
+    <string name="save">Gem</string>
+    <string name="approve">Godkend</string>
+    <string name="decline">Afvis</string>
+    <string name="delete">Slet</string>
+    <string name="search_hint">Søg i drikkevarer</string>
+    <string name="detailImageContentDesc">Billede til at vise den valgte drikkevare</string>
+    <string name="detailsName">Navn:</string>
+    <string name="detailsCompany">Produccent</string>
+    <string name="detailsDescription">Beskrivelse:</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Adgangskode</string>
+    <string name="profile_email">Email:</string>
+    <string name="profile_ratings_given">Bedømmelser givet:</string>
+    <string name="profile_beverages_approved">Godkendte drikkevarer:</string>
+    <string name="detailsBack">Tilbage</string>
+    <string name="detailsUpdateRating">Opdater bedømmelse</string>
+    <string name="updateRatingText">opdateret bedømmelse til</string>
+    <string name="beverage_detail_rating_text">Bedøm drikkevare:</string>
+</resources>

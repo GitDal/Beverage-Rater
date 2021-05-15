@@ -9,7 +9,7 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/wrapperListFragment"
         android:name="dk.au.mad21spring.appproject.group6.fragments.wrapper.ListFragment"
-        android:layout_width="400dp"
+        android:layout_width="300dp"
         android:layout_height="fill_parent"
         android:visibility="visible" />
 
